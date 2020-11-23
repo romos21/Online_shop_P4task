@@ -2,14 +2,14 @@ import React from 'react';
 import '../styles/components/App.css';
 import {withRouter, Route, Link} from 'react-router-dom';
 import shortId from 'short-id';
-//import ProductsListPage from './ProductsListPage.jsx';
 import UserPage from "./UserPage";
 import SignInPage from "./SignInPage";
 import ProductsAddPage from "./ProductsAddPage";
+import ProductsListPage from "./ProductsListPage";
 
 function App() {
 
-    const inputRowsForSignIn=[
+    const inputRowsForSignIn = [
         {
             placeholder: 'Email',
             type: 'email',
@@ -40,8 +40,8 @@ function App() {
         ...inputRowsForSignIn
     ];
 
-    inputRowsForSignIn.forEach(el=>el.id=shortId.generate());
-    inputRowsForCreatingAcc.forEach(el=>el.id=shortId.generate());
+    inputRowsForSignIn.forEach(el => el.id = shortId.generate());
+    inputRowsForCreatingAcc.forEach(el => el.id = shortId.generate());
 
     return (
         <div className='container'>
@@ -72,9 +72,11 @@ function App() {
             </svg>
             <header className='header'>
                 <div className='header-logo-block'>
-                    <img
-                        alt='site logo'
-                        className='header-logo' src='http://cdn.onlinewebfonts.com/svg/img_19826.png'/>
+                    <Link to='/'>
+                        <img
+                            alt='site logo'
+                            className='header-logo' src='http://cdn.onlinewebfonts.com/svg/img_19826.png'/>
+                    </Link>
                     <span className='header-title'>online</span>
                     <span className='header-title shop'>shop</span>
                 </div>
@@ -93,8 +95,9 @@ function App() {
                 <Route path='/newAccount'>
                     <SignInPage inputRows={inputRowsForCreatingAcc}/>
                 </Route>
-                <UserPage/>
-                <ProductsAddPage/>
+                <Route path='/userPage'><UserPage/></Route>
+                <Route path='/prodAddPage'><ProductsAddPage/></Route>
+                <Route exact path='/'><ProductsListPage/></Route>
             </main>
             <footer className='footer'>
                 <span className='footer-text'>Students ITechArt Lab 2020</span>

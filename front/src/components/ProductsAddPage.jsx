@@ -6,6 +6,7 @@ function ProductsAddPage() {
         <section className='prod-add-sec'>
             <h1 className='prod-add-head'>Add Product</h1>
             <form className='prod-add-form'>
+                <input className='prod-add-input' required type='text' placeholder='title'/>
                 <input className='prod-add-input' required type='text' placeholder='description'/>
                 <input className='prod-add-input' required type='file' placeholder='image'/>
                 <input className='prod-add-input' required type='number' placeholder='cost'/>
