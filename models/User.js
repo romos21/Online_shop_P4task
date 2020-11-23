@@ -1,7 +1,7 @@
 const {Schema, model, Types}=require('mongoose');
 
 const schema=new Schema({
-    id: new Types.ObjectId,
+    id: {type:Types.ObjectId},
     name:{type: String, required:true,trim:true},
     secName:{type: String, required:true,trim:true},
     email:{type: String, required:true,trim:true},
