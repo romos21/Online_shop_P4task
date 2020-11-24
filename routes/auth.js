@@ -7,6 +7,7 @@ const user = require('../models/User');
 
 router.post('/register', async (req, res) => {
     try {
+        console.log(req.body.email);
         const {email, password} = req.body
         const userRegister = await user.findOne({email: email});
         if (userRegister) {
@@ -19,10 +20,11 @@ router.post('/register', async (req, res) => {
         })
 
         await newUser.save();
-
-        return res.send('Пользователь создан');
+        const {name,secName,country,phone}=userRegister;
+        return res.send({name,secName,country,phone});
     } catch (err) {
         console.log(`${err} message`);
+        return res.send('Ошибка!');
     }
 })
 
@@ -30,6 +32,7 @@ router.post('/login', async (req, res) => {
     try {
         const {email, password} = req.body
         const userRegister = await user.findOne({email: email});
+        console.log(userRegister,email);
         if (!userRegister ) {
             return res.send('Данный пользователь не зарегистрирован');
         }
@@ -41,10 +44,11 @@ router.post('/login', async (req, res) => {
             {userId:userRegister.id},
             jwtSecret,
         )
-
-        return res.send(token);
+        const {name,secName,country,phone}=userRegister;
+        return res.send({name,secName,country,phone});
     } catch (err) {
         console.log(`${err} message`);
+        return res.send('Error');
     }
 })
 

@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import shortId from 'short-id';
 import '../styles/components/ProductsListPage.css';
-import {Link, Route} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
-function ProductsListPage(props) {
-    console.log(props.inputRows);
+function ProductsListPage() {
     const [countToBasket, setCountToBasket] = useState(0);
     const products = [
         {

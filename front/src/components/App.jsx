@@ -1,47 +1,13 @@
 import React from 'react';
 import '../styles/components/App.css';
 import {withRouter, Route, Link} from 'react-router-dom';
-import shortId from 'short-id';
 import UserPage from "./UserPage";
-import SignInPage from "./SignInPage";
+import LoginPage from "./LoginPage";
+import RegistrationPage from "./RegistrationPage";
 import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
 
 function App() {
-
-    const inputRowsForSignIn = [
-        {
-            placeholder: 'Email',
-            type: 'email',
-        },
-        {
-            placeholder: 'Password',
-            type: 'password',
-        },
-    ];
-
-    const inputRowsForCreatingAcc = [
-        {
-            placeholder: 'Name',
-            type: 'text',
-        },
-        {
-            placeholder: 'Second Name',
-            type: 'text',
-        },
-        {
-            placeholder: 'Country',
-            type: 'text',
-        },
-        {
-            placeholder: 'Phone Number',
-            type: 'tel',
-        },
-        ...inputRowsForSignIn
-    ];
-
-    inputRowsForSignIn.forEach(el => el.id = shortId.generate());
-    inputRowsForCreatingAcc.forEach(el => el.id = shortId.generate());
 
     return (
         <div className='container'>
@@ -83,17 +49,17 @@ function App() {
                 <div>
                     <div className='authorization-type'>Having account?</div>
                     <nav className='navbar'>
-                        <Link to='/signIn' className='authorization-link'>Yes</Link>
-                        <Link to='/newAccount' className='authorization-link'>No</Link>
+                        <Link to='/login' className='authorization-link'>Yes</Link>
+                        <Link to='/register' className='authorization-link'>No</Link>
                     </nav>
                 </div>
             </header>
             <main>
-                <Route path='/signIn'>
-                    <SignInPage inputRows={inputRowsForSignIn}/>
+                <Route path='/login'>
+                    <LoginPage/>
                 </Route>
-                <Route path='/newAccount'>
-                    <SignInPage inputRows={inputRowsForCreatingAcc}/>
+                <Route path='/register'>
+                    <RegistrationPage/>
                 </Route>
                 <Route path='/userPage'><UserPage/></Route>
                 <Route path='/prodAddPage'><ProductsAddPage/></Route>
