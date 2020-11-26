@@ -44,6 +44,22 @@
   font-size: 30px;
 }
 
+.link-element{
+  border-left: 3px solid #000;
+  border-right: 3px solid #000;
+  text-decoration: none;
+  color: #000;
+  font-size: 30px;
+  padding: 10px;
+  margin: 0 20px;
+  text-transform: uppercase;
+}
+
+.link-element:hover{
+  background-color: #000;
+  color: #fff;
+}
+
 .authorization-link{
   outline: none;
   border:5px solid rgb(21,21,21);

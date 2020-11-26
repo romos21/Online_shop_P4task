@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
 
         await newUser.save();
         const {name,secName,country,phone}=userRegister;
-        return res.send({name,secName,country,phone});
+        return res.send({name,secName,country,phone,email});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Ошибка!');
@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
             jwtSecret,
         )
         const {name,secName,country,phone}=userRegister;
-        return res.send({name,secName,country,phone});
+        return res.send({name,secName,country,phone,email});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Error');

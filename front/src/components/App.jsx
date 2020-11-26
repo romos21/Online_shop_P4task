@@ -6,8 +6,15 @@ import LoginPage from "./LoginPage";
 import RegistrationPage from "./RegistrationPage";
 import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
+import {connect} from "react-redux";
 
-function App() {
+const mapStateToProps = function (state) {
+    return {
+        user: state.userReducer,
+    }
+};
+
+function App(props) {
 
     return (
         <div className='container'>
@@ -55,6 +62,15 @@ function App() {
                 </div>
             </header>
             <main>
+                {
+                    props.user.email.length ?
+                        <nav className='prod-show-navbar'>
+                            <Link className='link-element' to='/'>catalog</Link>
+                            <Link className='link-element' to='/userPage'>user page</Link>
+                            {props.user.status==='admin'??<Link className='link-element' to='/prodAddPage'>add product</Link>}
+                        </nav>
+                        : null
+                }
                 <Route path='/login'>
                     <LoginPage/>
                 </Route>
@@ -89,4 +105,4 @@ function App() {
     );
 }
 
-export default withRouter(App);
+export default withRouter(connect(mapStateToProps)(App));

@@ -1,7 +1,16 @@
 import React from 'react';
 import '../styles/components/UserPage.css';
+import {connect} from 'react-redux';
 
-function UserPage() {
+const mapStateToProps = function (state){
+    console.log(state);
+    return {
+        user: state.userReducer,
+    }
+};
+
+function UserPage(props) {
+    console.log(props);
     const noImageUser = 'https://img.pngio.com/user-profile-avatar-login-account-svg-png-icon-free-download-user-profile-png-980_966.png';
     return (
         <section className='user-page-sec'>
@@ -14,11 +23,11 @@ function UserPage() {
                             <button type='submit' className='img-plus-el'>+</button>
                         </div>
                     </div>
-                    <p className='user-info-paragraph'>Name</p>
-                    <p className='user-info-paragraph'>Second Name</p>
-                    <p className='user-info-paragraph'>Country</p>
-                    <p className='user-info-paragraph'>Phone Number</p>
-                    <p className='user-info-paragraph'>Email</p>
+                    <p className='user-info-paragraph'>{props.user.name}</p>
+                    <p className='user-info-paragraph'>{props.user.secName}</p>
+                    <p className='user-info-paragraph'>{props.user.country}</p>
+                    <p className='user-info-paragraph'>{props.user.phone}</p>
+                    <p className='user-info-paragraph'>{props.user.email}</p>
                 </div>
                 <div className='history-block'>
                     <h1 className='history-block-head'>HISTORY</h1>
@@ -29,4 +38,4 @@ function UserPage() {
     );
 }
 
-export default UserPage;
+export default connect(mapStateToProps)(UserPage);

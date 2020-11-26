@@ -55,10 +55,6 @@ function ProductsListPage() {
 
     return (
         <>
-            <nav className='prod-show-navbar'>
-                <Link className='link-element' to='/userPage'>user page</Link>
-                <Link className='link-element' to='/prodAddPage'>add product</Link>
-            </nav>
             {products.map(product => {
                 return (
                     <section key={product.id} className='prod-show-sec'>

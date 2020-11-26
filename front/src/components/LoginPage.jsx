@@ -2,8 +2,23 @@ import React, {useState} from 'react';
 import '../styles/components/SignInPage.css';
 import Loader from "./Loader,";
 import {useHistory} from "react-router";
+import {connect} from 'react-redux';
+import {
+    userAuthorization
+} from "../actions";
 
-function LoginPage() {
+const mapStateToProps = function(state) {
+    console.log(state);
+    return {
+        user: state.userReducer,
+    }
+};
+
+const mapDispatchToProps={
+    userAuthorization,
+}
+
+function LoginPage(props) {
     const history=useHistory();
     const [loader, setLoader] = useState(false);
 
@@ -25,6 +40,8 @@ function LoginPage() {
             })
             response=await response.json();
             console.log(response);
+            props.userAuthorization(response);
+            console.log(props);
             history.push('/userPage');
         } catch (err) {
             console.log(err + ' message');
@@ -56,4 +73,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default connect(mapStateToProps,mapDispatchToProps)(LoginPage);
