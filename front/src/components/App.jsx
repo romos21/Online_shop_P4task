@@ -6,6 +6,7 @@ import LoginPage from "./LoginPage";
 import RegistrationPage from "./RegistrationPage";
 import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
+import UserBasketPage from "./UserBasketPage";
 import {connect} from "react-redux";
 
 const mapStateToProps = function (state) {
@@ -53,21 +54,27 @@ function App(props) {
                     <span className='header-title'>online</span>
                     <span className='header-title shop'>shop</span>
                 </div>
-                <div>
-                    <div className='authorization-type'>Having account?</div>
-                    <nav className='navbar'>
-                        <Link to='/login' className='authorization-link'>Yes</Link>
-                        <Link to='/register' className='authorization-link'>No</Link>
-                    </nav>
-                </div>
+                {
+                    props.user.email.length ?
+                        <Link to='/basket' className='authorization-link'>BASKET</Link>
+                        :<div>
+                            <div className='authorization-type'>Having account?</div>
+                            <nav className='navbar'>
+                                <Link to='/login' className='authorization-link'>Yes</Link>
+                                <Link to='/register' className='authorization-link'>No</Link>
+                            </nav>
+                        </div>
+                }
             </header>
             <main>
                 {
                     props.user.email.length ?
                         <nav className='prod-show-navbar'>
                             <Link className='link-element' to='/'>catalog</Link>
+                            {props.user.email?
+                            <Link className='link-element' to='/prodAddPage'>add product</Link>
+                            :null}
                             <Link className='link-element' to='/userPage'>user page</Link>
-                            {props.user.status==='admin'??<Link className='link-element' to='/prodAddPage'>add product</Link>}
                         </nav>
                         : null
                 }
@@ -80,6 +87,9 @@ function App(props) {
                 <Route path='/userPage'><UserPage/></Route>
                 <Route path='/prodAddPage'><ProductsAddPage/></Route>
                 <Route exact path='/'><ProductsListPage/></Route>
+                <Route path='/basket'>
+                    <UserBasketPage/>
+                </Route>
             </main>
             <footer className='footer'>
                 <span className='footer-text'>Students ITechArt Lab 2020</span>

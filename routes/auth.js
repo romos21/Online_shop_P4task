@@ -7,7 +7,7 @@ const user = require('../models/User');
 
 router.post('/register', async (req, res) => {
     try {
-        console.log(req.body.email);
+        console.log(req.body);
         const {email, password} = req.body
         const userRegister = await user.findOne({email: email});
         if (userRegister) {
@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
         })
 
         await newUser.save();
-        const {name,secName,country,phone}=userRegister;
+        const {name,secName,country,phone}=newUser;
         return res.send({name,secName,country,phone,email});
     } catch (err) {
         console.log(`${err} message`);

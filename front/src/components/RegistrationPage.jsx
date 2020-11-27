@@ -2,8 +2,20 @@ import React, {useState} from 'react';
 import '../styles/components/SignInPage.css';
 import {useHistory} from "react-router";
 import Loader from "./Loader,";
+import {connect} from 'react-redux';
+import {userAuthorization} from "../actions";
 
-function RegistrationPage() {
+const mapStateToProps=function (state){
+    return {
+        user: state.userReducer,
+    }
+}
+
+const mapDispatchToProps={
+    userAuthorization,
+}
+
+function RegistrationPage(props) {
     const history = useHistory();
     const [loader, setLoader] = useState(false);
     const [formRegister, setFormRegister] = useState({
@@ -29,6 +41,7 @@ function RegistrationPage() {
             })
             response = await response.json();
             console.log(response);
+            props.userAuthorization(response);
             history.push('/userPage');
         } catch (err) {
             console.log(err + ' message');
@@ -68,4 +81,4 @@ function RegistrationPage() {
     );
 }
 
-export default RegistrationPage;
+export default connect(mapStateToProps,mapDispatchToProps)(RegistrationPage);

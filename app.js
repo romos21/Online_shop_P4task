@@ -1,5 +1,6 @@
 const express = require('express');
 const auth=require('./routes/auth');
+const products=require('./routes/products');
 const mongoose = require('mongoose')
 const bodyParser=require('body-parser')
 const {port, mongoUri}=require('./config');
@@ -10,6 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/auth/',auth);
+app.use('/products',products);
 
 (async function () {
     try {
