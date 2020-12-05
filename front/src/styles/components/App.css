@@ -23,9 +23,39 @@
   align-items: center;
 }
 
+.basket-link{
+  text-decoration: none;
+}
+
+.basket-link-block{
+  display: flex;
+  align-items: flex-start;
+}
+
+.basket-icon{
+  fill: #fff;
+  height: 70px;
+  width: 70px;
+}
+
+.basket-icon:hover{
+  fill: #000;
+}
+
+.basket-products-count{
+  height: 20px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background-color: #d28b08;
+  color: #fff;
+}
+
 .header-logo{
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
 }
 
 .header-title{

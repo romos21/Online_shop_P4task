@@ -1,0 +1,48 @@
+.set-counter-sec{
+    width: 40%;
+    align-self: flex-end;
+}
+
+.set-count-value-block{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-count-btn{
+    outline: none;
+    color: #fff;
+    background-color: #000;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: 20px;
+}
+
+.product-button{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+    font-size: 21px;
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    outline: none;
+}
+
+.remove-state{
+    background-color: #749289;
+}
+
+.add-state{
+    background-color: #10b386;
+}
+
+
+.product-button:hover{
+    background-color: #000;
+    color: #fff;
+}

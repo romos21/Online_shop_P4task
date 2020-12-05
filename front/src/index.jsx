@@ -7,8 +7,6 @@ import './styles/components/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
-console.log(store);
-
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>

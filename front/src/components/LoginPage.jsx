@@ -1,26 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState,useRef} from 'react';
 import '../styles/components/SignInPage.css';
 import Loader from "./Loader,";
 import {useHistory} from "react-router";
 import {connect} from 'react-redux';
 import {
-    userAuthorization
+    userAuthorization,
 } from "../actions";
+import {loginForm} from "../constants/forms";
+import FormComponent from "./FormComponent";
 
-const mapStateToProps = function(state) {
-    console.log(state);
-    return {
-        user: state.userReducer,
-    }
-};
 
-const mapDispatchToProps={
+const mapDispatchToProps = {
     userAuthorization,
 }
 
 function LoginPage(props) {
-    const history=useHistory();
+    const history = useHistory();
     const [loader, setLoader] = useState(false);
+    const [loginFailed,setLoginFailed] = useState('');
 
     const [formLogin, setFormLogin] = useState({
         email: '',
@@ -31,46 +28,50 @@ function LoginPage(props) {
         event.preventDefault();
         try {
             setLoader(true);
+            setLoginFailed('');
+            console.log(formLogin);
             let response = await fetch('/auth/login', {
                 method: 'POST',
-                headers:{
-                    'Content-type':'application/json',
+                headers: {
+                    'Content-type': 'application/json',
                 },
                 body: JSON.stringify(formLogin),
             })
-            response=await response.json();
-            console.log(response);
-            props.userAuthorization(response);
-            console.log(props);
-            history.push('/userPage');
+            response = await response.json();
+            if (response) {
+                console.log(response);
+                props.userAuthorization(response);
+                history.push('/userPage');
+            } else if(response.message){
+                console.log(response.message)
+                setLoginFailed(response.message);
+                console.log(loginFailed);
+            }
         } catch (err) {
             console.log(err + ' message');
         }
         setLoader(false);
     }
 
-    const changeRow = event => {
-        setFormLogin({
-            ...formLogin,
-            [event.target.name]: event.target.value,
-        })
-    }
-
     return (
         <>
-            {loader? <Loader/>:null}
-            <section className='sign-in-sec'>
-                <h1 className='sign-in-sec-head'>sign in now!</h1>
-                <form className='sign-in-form'>
-                    <input name='email' type='email' required onChange={changeRow} placeholder='email'
-                           className='sign-in-input'/>
-                    <input name='password' type='password' required onChange={changeRow} placeholder='password'
-                           className='sign-in-input'/>
-                    <button onClick={sendInfo} className='sign-in-button'>Sign In!</button>
-                </form>
-            </section>
+            {loader ? <Loader/> : null}
+            <FormComponent
+                formInputs={loginForm}
+                onChangeInputState={setFormLogin}
+                inputState={formLogin}
+                onClickListener={sendInfo}
+                btnTextContent='Log In'
+            />
         </>
     );
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(LoginPage);
+
+/*{
+    loginFailed?
+        <p className='login-failed-paragraph'>{loginFailed}</p>
+        : null
+}*/
+
+export default connect(null, mapDispatchToProps)(LoginPage);

@@ -2,3 +2,66 @@
     text-transform: uppercase;
     font-size: 50px;
 }
+
+.product-sec,.no-product{
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin: 40px auto;
+}
+
+.product-sec{
+    background-color: #10b386;
+    justify-content: left;
+    color: #fff;
+}
+
+.no-product{
+    background-color: #eeb6b6;
+    color: #ff3030;
+    font-size: 30px;
+    justify-content: center;
+}
+.no-product>a{
+    color: #198509;
+    text-decoration: none;
+    margin: 5px;
+}
+
+.product-img{
+    height: 100%;
+    width: 30%;
+}
+
+.product-info-block{
+    margin: 0 20px;
+    font-size: 21px;
+    color: #fff;
+}
+
+/*.product-button{
+    background-color: #7d8585;
+    color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+}*/
+
+.change-count-block{
+    text-align: center;
+}
+
+.set-count-value-block{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*
+.change-count-btn{
+    background-color: #000;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: 20px;
+}*/

@@ -1,20 +1,47 @@
-import React from 'react';
+import React,{useState} from 'react';
 import '../styles/components/ProductsAddPage.css';
+import {connect} from "react-redux";
+import {productsSet} from "../actions";
+import FormComponent from "./FormComponent";
+import {addProductForm} from "../constants/forms";
 
-function ProductsAddPage() {
+const mapDispatchToProps={
+    productsSet
+}
+
+function ProductsAddPage(props) {
+
+    const [formProduct, setFormProduct] = useState({
+        title:'',
+        description:'',
+        cost:0,
+        count:0,
+    });
+
+    const addProduct=async (event)=>{
+        event.preventDefault();
+        console.log(formProduct);
+        let response=await fetch('products/add',{
+            method:'POST',
+            headers:{
+                'Content-type':'application/json',
+            },
+            body: JSON.stringify(formProduct),
+        })
+        response=await response.json();
+        console.log(response);
+        props.productsSet(response);
+    }
+
     return (
-        <section className='prod-add-sec'>
-            <h1 className='prod-add-head'>Add Product</h1>
-            <form className='prod-add-form' encType='multipart/form-data'>
-                <input className='prod-add-input' required type='text' placeholder='title'/>
-                <input className='prod-add-input' required type='text' placeholder='description'/>
-                <input className='prod-add-input' required type='file' placeholder='image'/>
-                <input className='prod-add-input' required type='number' placeholder='cost'/>
-                <input className='prod-add-input' required type='number' placeholder='count'/>
-                <button className='prod-add-button' type='submit'>+</button>
-            </form>
-        </section>
+        <FormComponent
+            onChangeInputState={setFormProduct}
+            inputState={formProduct}
+            formInputs={addProductForm}
+            onClickListener={addProduct}
+            btnTextContent='Add Product'
+        />
     );
 }
 
-export default ProductsAddPage;
+export default connect(null,mapDispatchToProps)(ProductsAddPage);

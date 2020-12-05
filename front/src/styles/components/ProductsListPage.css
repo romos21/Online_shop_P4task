@@ -25,24 +25,6 @@
     margin: 0 40px;
 }
 
-.change-count-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    font-size: 25px;
-    border: none;
-    background-color: #10b386;
-    color: #fff;
-    border-radius: 10px;
-    outline: none;
-}
-
-.change-count-btn:hover{
-    background-color: #000;
-    color: #fff;
-}
-
 .product-show-img{
     width: 30%;
     height: 100%;
@@ -54,6 +36,3 @@
     align-items: center;
 }
 
-.current-basket-count{
-    margin: 0 20px;
-}

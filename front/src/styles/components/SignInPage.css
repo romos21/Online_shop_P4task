@@ -3,6 +3,14 @@
     margin: 30px auto;
 }
 
+.login-failed-paragraph{
+    background-color: #eeb6b6;
+    padding: 20px;
+    color: #ff3030;
+    font-size: 21px;
+    text-align: center;
+}
+
 .sign-in-sec-head,.sign-in-button{
     background-color: #10b386;
     color: #fff;

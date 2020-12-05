@@ -3,18 +3,16 @@ import '../styles/components/UserPage.css';
 import {connect} from 'react-redux';
 
 const mapStateToProps = function (state){
-    console.log(state);
     return {
         user: state.userReducer,
     }
 };
 
 function UserPage(props) {
-    console.log(props);
     const noImageUser = 'https://img.pngio.com/user-profile-avatar-login-account-svg-png-icon-free-download-user-profile-png-980_966.png';
     return (
         <section className='user-page-sec'>
-            <h1 className='user-page-sec-head'>Welcome, User!</h1>
+            <h1 className='user-page-sec-head'>Welcome, {props.user.name}!</h1>
             <section className='user-info-sec'>
                 <div className='user-info-block'>
                     <div className='img-block'>
