@@ -5,4 +5,9 @@ export const activeUserInfo={
     phone:'',
     status:'',
     email:'',
-}
+    basketProductsCount:'',
+};
+
+export const productsList=[];
+
+export const userBasket=[];
