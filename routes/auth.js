@@ -1,9 +1,10 @@
 const {Router} = require('express');
 const bcrypt = require('bcrypt');
-const jwt=require('jsonwebtoken');
-const {jwtSecret}=require('../config')
+/*const jwt = require('jsonwebtoken');
+const {jwtSecret} = require('../config')*/
 const router = Router();
 const user = require('../models/User');
+const basket=require('../models/UserBasket');
 
 router.post('/register', async (req, res) => {
     try {
@@ -20,8 +21,12 @@ router.post('/register', async (req, res) => {
         })
 
         await newUser.save();
-        const {name,secName,country,phone}=newUser;
-        return res.send({name,secName,country,phone,email});
+        const newUserBasket=new basket({
+            user_id:newUser.id,
+        })
+        await newUserBasket.save();
+        const {name, secName, country, phone} = newUser;
+        return res.send({name, secName, country, phone, email});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Ошибка!');
@@ -32,24 +37,25 @@ router.post('/login', async (req, res) => {
     try {
         const {email, password} = req.body
         const userRegister = await user.findOne({email: email});
-        console.log(userRegister,email);
-        if (!userRegister ) {
-            return res.send('Данный пользователь не зарегистрирован');
+        if (!userRegister) {
+            return res.send({message: 'User not found'});
         }
-        const isMatch=bcrypt.compare(password,userRegister.password);
-        if(!isMatch){
-            return res.send(`Не верный пароль для ${userRegister.name} ${userRegister.secName}`);
+        const isMatch = await bcrypt.compare(password, userRegister.password);
+        if (!isMatch) {
+            return res.send({message: `Not correct data for ${userRegister.name} ${userRegister.secName} account`});
         }
-        const token=jwt.sign(
-            {userId:userRegister.id},
+
+        const userBasket=await basket.findOne({user_id:userRegister.id})
+        /*const token = jwt.sign(
+            {userId: userRegister.id},
             jwtSecret,
-        )
-        const {name,secName,country,phone}=userRegister;
-        return res.send({name,secName,country,phone,email});
+        )*/
+        const {name, secName, country, phone} = userRegister;
+        return res.send({name, secName, country, phone, email, basketProductsCount: userBasket.products.length});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Error');
     }
 })
 
-module.exports=router;
+module.exports = router;
