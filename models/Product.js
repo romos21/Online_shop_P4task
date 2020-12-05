@@ -11,11 +11,11 @@ const schema=new Schema({
         type:String,
         trim: true,
     },
-    img: {
+    /*img: {
         type:Types.BinData,
         required: true,
         trim: true,
-    },
+    },*/
     cost: {
         type:Number,
         required: true,
