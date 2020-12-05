@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/auth/',auth);
 app.use('/products/',products);
+app.use('/basket/',basket);
 
 (async function () {
     try {
