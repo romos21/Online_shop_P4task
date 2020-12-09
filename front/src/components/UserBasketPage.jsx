@@ -17,7 +17,7 @@ const mapDispatchToProps = {
     basketAdd,
 }
 
-const UserBasketPage = (props) => {
+const UserBasketPage = props => {
 
     useEffect(() => {
         fetch(`basket/getBasket`, {
@@ -25,11 +25,11 @@ const UserBasketPage = (props) => {
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({user_id: props.user.id}),
+            body: JSON.stringify({user_id: props.user._id}),
         })
             .then(res => res.json())
-            .then(data => {
-                props.basketAdd(data);
+            .then(data=> {
+                props.basketAdd(data.basket);
             })
 
     }, [])

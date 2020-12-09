@@ -50,7 +50,7 @@ export const addProductForm=[
         name:'cost',
     },
     {
-        type:'count',
-        name:'number',
+        type:'number',
+        name:'count',
     },
 ]

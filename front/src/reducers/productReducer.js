@@ -1,11 +1,20 @@
 import {handleActions} from 'redux-actions'
 import {productsList} from '../constants/defaultState';
-import {productsSet} from '../actions';
+import {productsSet, productsChangeProduct} from '../actions';
 
 export default handleActions({
-    [productsSet]:(state, {payload})=>{
+    [productsSet]: (state, {payload}) => {
         return [
             ...payload
         ];
-    }
+    },
+    [productsChangeProduct]: (state, {payload}) => {
+        const resultBasket = state.map(product => {
+            if (product._id === payload._id) {
+                return payload;
+            }
+            return product;
+            })
+        return resultBasket;
+    },
 }, productsList);

@@ -1,11 +1,11 @@
 const {Schema,model}=require('mongoose')
 
 const schema=new Schema({
-    user_id:String,
+    user_id:Object,
     products:{
         type: [Object],
         default:[],
-        id: {type:String},
+        id: {type:Object},
         count:{type:Number},
     },
 })

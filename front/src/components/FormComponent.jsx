@@ -25,7 +25,6 @@ function FormComponent(props) {
             <form className='sign-in-form'>
                 {
                     formInputsWithKeys.map(input => {
-                        console.log(inputRef.current.name);
                         const isOnFocus=(input.name===inputRef.current.name);
                         return (
                             <input

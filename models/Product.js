@@ -1,7 +1,6 @@
 const {Schema,model,Types}=require('mongoose')
 
 const schema=new Schema({
-    id: Types.ObjectId,
     title: {
         type:String,
         required: true,

@@ -4,8 +4,8 @@ import {userAuthorization} from '../actions';
 
 export default handleActions({
     [userAuthorization]: (state,{payload})=>{
-        console.log(payload);
         return {
+            ...state,
             ...payload,
         }
     }

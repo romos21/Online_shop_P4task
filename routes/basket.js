@@ -1,28 +1,23 @@
 const {Router} = require('express');
 const userBasket = require('../models/UserBasket');
+const {Types}=require('mongoose');
 const product = require('../models/Product');
 
 const router = Router();
 
 router.post('/getBasket', async (req, res) => {
     try {
-        const basket = await userBasket.findOne({user_id: req.body.user_id});
-        let productsResIds = [];
-        let productsResCount = [];
-        basket.products.forEach(product => {
-            productsResIds.push(product.id);
-            productsResCount.push(product.count);
-        })
-        console.log(basket);
-        const productsRes = await product.find({_id: {$in: productsResIds}})
-        let basketRes = [];
-        for (let i = 0; i < productsRes.length; i++) {
-            basketRes[i] = {
-                ...productsRes[i]._doc,
-                count: productsResCount[i],
-            }
+        const basket = await userBasket.findOne({user_id: Types.ObjectId(req.body.user_id)});
+        if(!basket.products.length){
+            return res.send({basket:[]})
         }
-        return res.send(basketRes);
+        let basketToSend=[];
+        for (let i=0; i<basket.products.length;i++){
+            basketToSend[i]=await product.findOne({_id: basket.products[i]._id});
+            basketToSend[i].count=basket.products[i].count;
+        }
+
+        return res.send({basket:basketToSend})
     } catch (err) {
         console.log(err + 'message');
         return res.send(err);
@@ -32,37 +27,59 @@ router.post('/getBasket', async (req, res) => {
 router.post('/change', async (req, res) => {
     try {
 
-        const basket = await userBasket.findOne({user_id: req.body.user_id})
-        const productToChangeCount = await product.findOne({_id: req.body.product._id})
-        console.log(basket.products);
-        const productIndex = basket.products.findIndex((product,index )=> {
-            if(product.id === req.body.product._id){
-                return index;
-            }
-        })
+        const reqProductId=Types.ObjectId(req.body.product._id);
+        const reqUserId=Types.ObjectId(req.body.user_id);
 
-        if (productIndex === -1) {
+        let userBasketFind = await userBasket.findOne({user_id: reqUserId});
+
+        let basket = userBasketFind.products.length
+            ? userBasketFind
+            : {
+                user_id: reqUserId,
+                products: [
+                    {
+                        _id: reqProductId,
+                        count: 0,
+                    }
+                ],
+            };
+
+        const productToChange = await product.findOne({_id: reqProductId})
+
+        productToChange.count -= req.body.product.count;
+
+        const productToFind = basket.products.find(product => product._id.toString() === reqProductId.toString());
+
+        if (!productToFind) {
             basket.products.push({
-                id: req.body.product._id,
+                _id: reqProductId,
                 count: req.body.product.count,
             })
         } else {
-            basket.products[productIndex].count += req.body.product.count;
+            basket.products=basket.products.map(product=>{
+                if(product._id.toString()===reqProductId.toString()){
+                    product.count+=req.body.product.count;
+                }
+                return product;
+            })
+            basket.products=basket.products.filter(product=> product.count!==0);
         }
 
-        productToChangeCount.count -= req.body.product.count;
-        await userBasket.findOneAndUpdate({id: req.body.user_id}, {products: basket.products}, {
-            new: true,
-            useFindAndModify: false
-        })
-        await product.findOneAndUpdate({_id: req.body.product.id}, {count: productToChangeCount.count}, {
-            new: true,
-            useFindAndModify: false
-        })
+        await userBasket.updateOne({user_id: reqUserId}, {products: basket.products});
+        await product.updateOne({_id: reqProductId}, {count: productToChange.count});
 
-        console.log(basket);
+        const productToSend = basket.products.find(product => product._id.toString() === reqProductId.toString());
+        const productToSendCount=productToSend?productToSend.count:0;
 
-        return res.send(basket.products.length);
+        return res.send({
+            basketLength: basket.products.length,
+            product: {
+                ...productToChange._doc,
+                count: req.body.stateForReturn==='basket'?
+                    productToSendCount
+                    :productToChange.count,
+            }
+        });
     } catch (err) {
         console.log(err + 'message');
         return res.send(err);

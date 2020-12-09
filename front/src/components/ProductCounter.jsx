@@ -4,21 +4,24 @@ import classNames from 'classnames';
 import {connect} from "react-redux";
 import {useHistory} from 'react-router-dom';
 
-import {basketAdd, productsSet} from "../actions";
+import {basketChangeProduct, productsChangeProduct,userAuthorization} from "../actions";
 
 const mapStateToProps = function (state) {
     return {
         user: state.userReducer,
+        basket: state.basketReducer,
     }
 }
 
 const mapDispatchToProps = {
-    basketAdd
+    basketChangeProduct,
+    productsChangeProduct,
+    userAuthorization
 }
 
 function ProductCounter(props) {
 
-    const {product,user,basketAdd}=props;
+    const {product,basket,user,userAuthorization,basketChangeProduct,productsChangeProduct}=props;
 
     const btnAddState = 'Add To Basket';
     const btnRemoveState = 'Remove From Basket';
@@ -27,20 +30,21 @@ function ProductCounter(props) {
     const [btnTextContent, btnTextContentChange] = useState(btnAddState);
     const [productCount, productCountChange] = useState(0);
 
-    const addOneToCount = (event) => {
-        /*if(product.count<productCount+1){
+    const addOneToCount = () => {
+        if(productCount+1>product.count){
             return;
-        }*/
+        }
         if (productCount + 1 >= 0 && btnTextContent === btnRemoveState) {
             btnTextContentChange(btnAddState);
         }
         productCountChange(productCount + 1);
     }
 
-    const removeOneFromCount = (event) => {
-        /*if(product.count<productCount-1){
+    const removeOneFromCount = () => {
+        const productToRemove=basket.find(el=>el._id===product._id);
+        if(productToRemove.count+productCount-1<0){
             return;
-        }*/
+        }
         if (productCount - 1 < 0 && btnTextContent === btnAddState) {
             btnTextContentChange(btnRemoveState);
         }
@@ -51,8 +55,10 @@ function ProductCounter(props) {
         if (!user.email) {
             history.push('/login');
         } else {
+            const stateForReturn=history.location.pathname==='/'?'main':'basket';
             const fetchBody={
                 user_id: user._id,
+                stateForReturn: stateForReturn,
                 product: {
                     _id: product._id,
                     count: productCount,
@@ -66,17 +72,27 @@ function ProductCounter(props) {
                 body: JSON.stringify(fetchBody),
             })
             const responseJSON=await response.json();
-            console.log(responseJSON);
-            if(user.basketProductsCount!==responseJSON){
-                console.log('changed Basket Products Count')
+            if(user.basketProductsCount!==responseJSON.basketLength){
+                userAuthorization({basketProductsCount:responseJSON.basketLength});
             }
+            if(stateForReturn==='main'){
+                productsChangeProduct(responseJSON.product);
+            } else {
+                basketChangeProduct(responseJSON.product);
+            }
+            productCountChange(0);
+            btnTextContentChange(btnAddState);
         }
     }
 
     return (
         <section className='set-counter-sec'>
             <div className='set-count-value-block'>
-                <button onClick={removeOneFromCount} className='change-count-btn'>-</button>
+                {
+                    history.location.pathname==='/basket'?
+                        <button onClick={removeOneFromCount} className='change-count-btn'>-</button>
+                        :null
+                }
                 <span>{productCount}</span>
                 <button onClick={addOneToCount} className='change-count-btn'>+</button>
             </div>
