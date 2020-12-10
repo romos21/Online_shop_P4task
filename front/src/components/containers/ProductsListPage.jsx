@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import '../styles/components/ProductsListPage.css';
+import '../../styles/components/ProductsListPage.css';
 import {connect} from "react-redux";
-import {productsSet} from "../actions";
-import ShowProductsComponent from "./ShowProductsComponent";
+import {productsSet} from "../../actions";
+import ShowProductsComponent from "../pages/ShowProductsComponent";
 
 const mapStateToProps = function (state) {
     return {

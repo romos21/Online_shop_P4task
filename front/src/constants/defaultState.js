@@ -7,6 +7,7 @@ export const activeUserInfo={
     status:'',
     email:'',
     basketProductsCount:0,
+    isAdmin: false,
 };
 
 export const productsList=[];

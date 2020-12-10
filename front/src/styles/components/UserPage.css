@@ -1,8 +1,27 @@
 .user-page-sec{
+    position: relative;
     max-width: 1000px;
     margin: 20px auto;
     padding: 30px;
     background-color: #fff;
+}
+
+.log-out-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff3030;
+    color: #fff;
+    font-size: 21px;
+    padding: 10px;
+    border-bottom-left-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.log-out-btn:hover{
+    transition: 0.5s;
+    background-color: #000;
 }
 
 .user-page-sec-head{

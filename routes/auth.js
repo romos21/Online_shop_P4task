@@ -17,6 +17,7 @@ router.post('/register', async (req, res) => {
         const newUser = new user({
             ...req.body,
             password: hashedPassword,
+            isAdmin: false,
         })
 
         await newUser.save();
@@ -26,8 +27,8 @@ router.post('/register', async (req, res) => {
         })
         await newUserBasket.save();
 
-        const {_id,name, secName, country, phone} = newUser;
-        return res.send({_id,name, secName, country, phone, email});
+        const {_id,isAdmin,name, secName, country, phone} = newUser;
+        return res.send({_id,isAdmin,name, secName, country, phone, email});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Ошибка!');
@@ -39,11 +40,11 @@ router.post('/login', async (req, res) => {
         const {email, password} = req.body
         const userLogin = await user.findOne({email: email});
         if (!userLogin) {
-            return res.send({message: 'User not found'});
+            return res.send({loginErrMsg: 'User not found'});
         }
         const isMatch = await bcrypt.compare(password, userLogin.password);
         if (!isMatch) {
-            return res.send({message: `Not correct data for ${userLogin.name} ${userLogin.secName} account`});
+            return res.send({loginErrMsg: `Not correct data for ${userLogin.name} ${userLogin.secName} account`});
         }
 
         const userBasket=await basket.findOne({user_id:userLogin._id})
@@ -52,8 +53,8 @@ router.post('/login', async (req, res) => {
             {userId: userRegister.id},
             jwtSecret,
         )*/
-        const {_id,name, secName, country, phone} = userLogin;
-        return res.send({_id,name, secName, country, phone, email, basketProductsCount: userBasket.products.length});
+        const {_id,isAdmin,name, secName, country, phone} = userLogin;
+        return res.send({_id,name,isAdmin, secName, country, phone, email, basketProductsCount: userBasket.products.length});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Error');

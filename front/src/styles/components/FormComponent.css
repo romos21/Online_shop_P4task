@@ -1,4 +1,4 @@
-.sign-in-sec{
+.form-sec{
     max-width: 600px;
     margin: 30px auto;
 }
@@ -11,7 +11,7 @@
     text-align: center;
 }
 
-.sign-in-sec-head,.sign-in-button{
+.form-sec-head,.form-button{
     background-color: #10b386;
     color: #fff;
     padding: 20px;
@@ -20,12 +20,12 @@
     text-align: center;
 }
 
-.sign-in-sec-head{
+.form-sec-head{
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }
 
-.sign-in-button{
+.form-button{
     width: 100%;
     border: none;
     box-sizing: border-box;
@@ -34,18 +34,18 @@
     font-size: 30px;
 }
 
-.sign-in-form,.sign-in-button{
+.form-submit,.form-button{
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }
 
-.sign-in-button:hover{
+.form-button:hover{
     background-color: #000000;
     color: #10b386;
     transition: 2s;
 }
 
-.sign-in-form{
+.form-submit{
     background-color: #fff;
     margin: 0 auto;
     display: flex;
@@ -53,14 +53,18 @@
     justify-content: space-between;
 }
 
-.sign-in-input{
-    width: 80%;
+.form-input{
+    width: 90%;
     box-sizing: border-box;
-    padding: 10px;
     margin: 20px auto;
-    border:none;
+    padding: 20px;
     outline: none;
-    border-bottom: 2px solid #7d8585;
+    border: none;
+    border-bottom: 1px solid #7d8585;
     font-size: 30px;
+}
+
+.prod-add-input[type='file']{
+    background-color: #10b386;
 }
 

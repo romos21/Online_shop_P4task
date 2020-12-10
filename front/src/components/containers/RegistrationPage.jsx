@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import '../styles/components/SignInPage.css';
+import '../../styles/components/FormComponent.css';
 import {useHistory} from "react-router";
-import Loader from "./Loader,";
+import Loader from "../pages/Loader,";
 import {connect} from 'react-redux';
-import {userAuthorization} from "../actions";
-import FormComponent from "./FormComponent";
-import {registrationForm} from "../constants/forms";
+import {userAuthorization} from "../../actions";
+import FormComponent from "../pages/FormComponent";
+import {registrationForm} from "../../constants/forms";
 
 const mapStateToProps=function (state){
     return {
@@ -54,11 +54,11 @@ function RegistrationPage(props) {
         <>
             {loader?<Loader/>:null}
             <FormComponent
+                headTextContent='Create Account'
                 formInputs={registrationForm}
                 onChangeInputState={setFormRegister}
                 inputState={formRegister}
                 onClickListener={sendInfo}
-                btnTextContent='Create Account'
             />
         </>
     );

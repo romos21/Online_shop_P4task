@@ -1,7 +1,7 @@
 import {createActions} from 'redux-actions';
 
 export const {
-    userAuthorization
+    userAuthorization,
 }=createActions(
     "USER_AUTHORIZATION",
 );

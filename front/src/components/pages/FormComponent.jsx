@@ -1,10 +1,11 @@
 import React,{useRef} from 'react';
 import shortId from 'short-id';
-import '../styles/components/SignInPage.css';
+import '../../styles/components/FormComponent.css';
+import {ErrorMsgPage} from "./ErrorMsgPage";
 
 function FormComponent(props) {
 
-    const {onChangeInputState,inputState}=props;
+    const {onChangeInputState,inputState,loginFailed}=props;
     let inputRef=useRef('');
     const formInputsWithKeys=props.formInputs.map(input=>({...input,key:shortId.generate()}));
 
@@ -20,16 +21,17 @@ function FormComponent(props) {
     }
 
     return (
-        <section className='prod-add-sec'>
-            <h1 className='prod-add-head'>Add Product</h1>
-            <form className='sign-in-form'>
+        <section className='form-sec'>
+            <h1 className='form-sec-head'>{props.headTextContent}</h1>
+            <form className='form-submit'>
+                {loginFailed? <ErrorMsgPage errMsg={loginFailed}/>:null}
                 {
                     formInputsWithKeys.map(input => {
                         const isOnFocus=(input.name===inputRef.current.name);
                         return (
                             <input
                                 key={input.key}
-                                className=''
+                                className='form-input'
                                 autoFocus={isOnFocus}
                                 type={input.type}
                                 name={input.name}
@@ -42,7 +44,7 @@ function FormComponent(props) {
                         )
                     })
                 }
-                <button onClick={props.onClickListener} className='sign-in-button'>{props.btnTextContent}</button>
+                <button onClick={props.onClickListener} className='form-button'>Send</button>
             </form>
         </section>
     );

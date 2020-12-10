@@ -1,13 +1,15 @@
 import React from 'react';
-import '../styles/components/App.css';
+import '../../styles/components/App.css';
 import {withRouter, Route, Link} from 'react-router-dom';
 import UserPage from "./UserPage";
 import LoginPage from "./LoginPage";
+import SetAdminStatusPage from "./SetAdminStatusPage";
 import RegistrationPage from "./RegistrationPage";
 import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
 import UserBasketPage from "./UserBasketPage";
 import {connect} from "react-redux";
+import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 
 const mapStateToProps = function (state) {
     return {
@@ -85,11 +87,14 @@ function App(props) {
             </header>
             <main>
                 {
-                    props.user.email.length ?
+                    props.user._id ?
                         <nav className='prod-show-navbar'>
                             <Link className='link-element' to='/'>catalog</Link>
-                            {props.user.email ?
-                                <Link className='link-element' to='/prodAddPage'>add product</Link>
+                            {props.user.isAdmin ?
+                                <>
+                                    <Link className='link-element' to='/prodAddPage'>add product</Link>
+                                    <Link className='link-element' to='/adminsList'>admins list</Link>
+                                </>
                                 : null}
                             <Link className='link-element' to='/userPage'>user page</Link>
                         </nav>
@@ -98,11 +103,28 @@ function App(props) {
                 <Route path='/login'>
                     <LoginPage/>
                 </Route>
+                <Route path='/adminsList'>
+                    <SetAdminStatusPage/>
+                </Route>
                 <Route path='/register'>
                     <RegistrationPage/>
                 </Route>
-                <Route path='/userPage'><UserPage/></Route>
-                <Route path='/prodAddPage'><ProductsAddPage/></Route>
+                <Route path='/userPage'>
+                    {
+                        props.user._id ?
+                            <UserPage/>
+                            : <ErrorMsgPage errMsg={'You are not authorized'}/>
+                    }
+                </Route>
+                <Route path='/prodAddPage'>
+                    {
+                        props.user._id ?
+                            props.user.isAdmin ?
+                                <ProductsAddPage/>
+                                : <ErrorMsgPage errMsg={'You are not an admin'}/>
+                            : <ErrorMsgPage errMsg={'You are not authorized'}/>
+                    }
+                </Route>
                 <Route exact path='/'><ProductsListPage/></Route>
                 <Route path='/basket'>
                     <UserBasketPage/>

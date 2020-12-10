@@ -1,9 +1,8 @@
 import React,{useState} from 'react';
-import '../styles/components/ProductsAddPage.css';
 import {connect} from "react-redux";
-import {productsSet} from "../actions";
-import FormComponent from "./FormComponent";
-import {addProductForm} from "../constants/forms";
+import {productsSet} from "../../actions";
+import FormComponent from "../pages/FormComponent";
+import {addProductForm} from "../../constants/forms";
 
 const mapDispatchToProps={
     productsSet
@@ -35,11 +34,11 @@ function ProductsAddPage(props) {
 
     return (
         <FormComponent
+            headTextContent='Add Product'
             onChangeInputState={setFormProduct}
             inputState={formProduct}
             formInputs={addProductForm}
             onClickListener={addProduct}
-            btnTextContent='Add Product'
         />
     );
 }

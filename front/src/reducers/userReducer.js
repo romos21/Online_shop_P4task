@@ -8,5 +8,5 @@ export default handleActions({
             ...state,
             ...payload,
         }
-    }
+    },
 },activeUserInfo);

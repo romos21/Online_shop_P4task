@@ -1,13 +1,13 @@
-import React, {useState,useRef} from 'react';
-import '../styles/components/SignInPage.css';
-import Loader from "./Loader,";
+import React, {useState, useRef} from 'react';
+import '../../styles/components/FormComponent.css';
+import Loader from "../pages/Loader,";
 import {useHistory} from "react-router";
 import {connect} from 'react-redux';
 import {
     userAuthorization,
-} from "../actions";
-import {loginForm} from "../constants/forms";
-import FormComponent from "./FormComponent";
+} from "../../actions";
+import {loginForm} from "../../constants/forms";
+import FormComponent from "../pages/FormComponent";
 
 
 const mapDispatchToProps = {
@@ -17,7 +17,7 @@ const mapDispatchToProps = {
 function LoginPage(props) {
     const history = useHistory();
     const [loader, setLoader] = useState(false);
-    const [loginFailed,setLoginFailed] = useState('');
+    const [loginFailed, setLoginFailed] = useState(null);
 
     const [formLogin, setFormLogin] = useState({
         email: '',
@@ -29,7 +29,6 @@ function LoginPage(props) {
         try {
             setLoader(true);
             setLoginFailed('');
-            console.log(formLogin);
             let response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {
@@ -38,14 +37,11 @@ function LoginPage(props) {
                 body: JSON.stringify(formLogin),
             })
             response = await response.json();
-            if (response) {
-                console.log(response);
+            if(response.loginErrMsg){
+                setLoginFailed(response.loginErrMsg);
+            } else {
                 props.userAuthorization(response);
                 history.push('/userPage');
-            } else if(response.message){
-                console.log(response.message)
-                setLoginFailed(response.message);
-                console.log(loginFailed);
             }
         } catch (err) {
             console.log(err + ' message');
@@ -57,21 +53,15 @@ function LoginPage(props) {
         <>
             {loader ? <Loader/> : null}
             <FormComponent
+                headTextContent='Log In Account'
                 formInputs={loginForm}
                 onChangeInputState={setFormLogin}
                 inputState={formLogin}
+                loginFailed={loginFailed}
                 onClickListener={sendInfo}
-                btnTextContent='Log In'
             />
         </>
     );
 }
-
-
-/*{
-    loginFailed?
-        <p className='login-failed-paragraph'>{loginFailed}</p>
-        : null
-}*/
 
 export default connect(null, mapDispatchToProps)(LoginPage);

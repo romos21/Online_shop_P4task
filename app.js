@@ -1,19 +1,46 @@
 const express = require('express');
-const auth=require('./routes/auth');
-const products=require('./routes/products');
-const basket=require('./routes/basket');
-const mongoose = require('mongoose')
-const bodyParser=require('body-parser')
-const {port, mongoUri}=require('./config');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
+//routes
+const routes = require('./routes');
+
+//constants
+const {port, mongoUri} = require('./config');
+
+//models
+const models = require('./models')
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
-app.use('/auth/',auth);
-app.use('/products/',products);
-app.use('/basket/',basket);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use('/auth/', routes.auth);
+app.use('/products/', routes.products);
+app.use('/basket/', async (req, res, next) => {
+
+    if (!req.query.user_id && !req.body.user_id) {
+        return res.send({errMsg: 'You are not authorized'});
+    }
+    const isBasketValidator = await models.userBasket.find({
+        _id: req.method === 'GET' ? req.query.user_id : req.body.user_id
+    });
+    console.log(req.query, req.body);
+    if (!isBasketValidator) {
+        return res.send({errMsg: 'Server Error: basket cannot find'});
+    }
+    next();
+}, routes.basket);
+app.use('/admin/', async (req, res, next) => {
+    if (!req.query._id) {
+        return res.send({errMsg: 'You are not authorized'});
+    }
+    const isAdminValidator = await models.user.find({_id: req.query._id});
+    if (!isAdminValidator) {
+        return res.send({errMsg: 'You is not admin'});
+    }
+    next();
+}, routes.admin);
 
 (async function () {
     try {

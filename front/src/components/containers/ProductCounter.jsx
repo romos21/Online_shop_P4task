@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import '../styles/components/ProductCounter.css';
+import '../../styles/components/ProductCounter.css';
 import classNames from 'classnames';
 import {connect} from "react-redux";
 import {useHistory} from 'react-router-dom';
 
-import {basketChangeProduct, productsChangeProduct,userAuthorization} from "../actions";
+import {basketChangeProduct, productsChangeProduct,userAuthorization} from "../../actions";
 
 const mapStateToProps = function (state) {
     return {
@@ -65,7 +65,7 @@ function ProductCounter(props) {
                 }
             }
             const response=await fetch('/basket/change', {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',
                 },

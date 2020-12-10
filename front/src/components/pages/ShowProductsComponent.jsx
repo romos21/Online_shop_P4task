@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCounter from "./ProductCounter";
+import ProductCounter from "../containers/ProductCounter";
 
 function ShowProductsComponent(props) {
 

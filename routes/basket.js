@@ -5,9 +5,9 @@ const product = require('../models/Product');
 
 const router = Router();
 
-router.post('/getBasket', async (req, res) => {
+router.get('/getBasket', async (req, res) => {
     try {
-        const basket = await userBasket.findOne({user_id: Types.ObjectId(req.body.user_id)});
+        const basket = await userBasket.findOne({user_id: Types.ObjectId(req.query.user_id)});
         if(!basket.products.length){
             return res.send({basket:[]})
         }
@@ -17,6 +17,8 @@ router.post('/getBasket', async (req, res) => {
             basketToSend[i].count=basket.products[i].count;
         }
 
+        console.log(basketToSend);
+
         return res.send({basket:basketToSend})
     } catch (err) {
         console.log(err + 'message');
@@ -24,7 +26,7 @@ router.post('/getBasket', async (req, res) => {
     }
 })
 
-router.post('/change', async (req, res) => {
+router.put('/change', async (req, res) => {
     try {
 
         const reqProductId=Types.ObjectId(req.body.product._id);
@@ -46,9 +48,18 @@ router.post('/change', async (req, res) => {
 
         const productToChange = await product.findOne({_id: reqProductId})
 
+        if(productToChange.count-req.body.product.count<0){
+            return res.send({errMsg: 'Too much product to add in basket'});
+        }
+
         productToChange.count -= req.body.product.count;
 
         const productToFind = basket.products.find(product => product._id.toString() === reqProductId.toString());
+
+        if(productToFind.count+req.body.product.count<0){
+            return res.send({errMsg: 'Too much product to remove from basket'});
+        }
+
 
         if (!productToFind) {
             basket.products.push({

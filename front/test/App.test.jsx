@@ -1,7 +1,7 @@
 import React from 'react';
 import reactDOM from 'react-dom';
 import { render, screen } from '@testing-library/react';
-import App from '../src/components/App';
+import App from '../src/components/containers/App';
 
 test('renders learn react link', () => {
   reactDOM.render(<App />);

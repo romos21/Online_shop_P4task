@@ -1,6 +1,11 @@
 import React from 'react';
-import '../styles/components/UserPage.css';
+import {useHistory} from "react-router";
+import '../../styles/components/UserPage.css';
 import {connect} from 'react-redux';
+import {noImageUser} from '../../constants/constantImages';
+import {userAuthorization} from "../../actions";
+
+import {activeUserInfo} from '../../constants/defaultState';
 
 const mapStateToProps = function (state){
     return {
@@ -8,10 +13,22 @@ const mapStateToProps = function (state){
     }
 };
 
+const mapDispatchToProps = {
+    userAuthorization,
+}
+
 function UserPage(props) {
-    const noImageUser = 'https://img.pngio.com/user-profile-avatar-login-account-svg-png-icon-free-download-user-profile-png-980_966.png';
+
+    const history=useHistory();
+
+    const logOut=()=>{
+        props.userAuthorization(activeUserInfo);
+        history.push('/login');
+    }
+
     return (
         <section className='user-page-sec'>
+            <button onClick={logOut} className='log-out-btn'>Log Out</button>
             <h1 className='user-page-sec-head'>Welcome, {props.user.name}!</h1>
             <section className='user-info-sec'>
                 <div className='user-info-block'>
@@ -36,4 +53,4 @@ function UserPage(props) {
     );
 }
 
-export default connect(mapStateToProps)(UserPage);
+export default connect(mapStateToProps,mapDispatchToProps)(UserPage);
