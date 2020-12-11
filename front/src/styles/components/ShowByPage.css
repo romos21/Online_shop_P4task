@@ -1,0 +1,44 @@
+.buy-sec{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+}
+
+.buys-list-block{
+    max-height: 300px;
+    overflow-y: scroll;
+    margin: 0 10px;
+    border: 3px solid #7d8585;
+}
+
+.none-display-block{
+    display: none;
+}
+
+.buying-block{
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: left;
+}
+
+.buying-img{
+    height: 100px;
+    width: 100px;
+    border: none;
+}
+
+.show-buys-svg{
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buying-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows:  1fr 1fr 1fr 1fr;
+}

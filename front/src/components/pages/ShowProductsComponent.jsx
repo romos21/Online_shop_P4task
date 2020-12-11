@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCounter from "../containers/ProductCounter";
+import {noImageProduct} from "../../constants/constantImages";
 
 function ShowProductsComponent(props) {
 
@@ -13,7 +14,7 @@ function ShowProductsComponent(props) {
                         return (
                             <section key={product._id} className='prod-show-sec'>
                                 <img alt={product.title}
-                                     src='https://agro96.ru/uploadedFiles/eshopimages/big/ut000000965.jpg'
+                                     src={noImageProduct}
                                      className='product-show-img'/>
                                 <section className='product-show-info'>
                                     <h2>{product.title}</h2>

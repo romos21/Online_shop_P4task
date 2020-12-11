@@ -25,7 +25,6 @@ app.use('/basket/', async (req, res, next) => {
     const isBasketValidator = await models.userBasket.find({
         _id: req.method === 'GET' ? req.query.user_id : req.body.user_id
     });
-    console.log(req.query, req.body);
     if (!isBasketValidator) {
         return res.send({errMsg: 'Server Error: basket cannot find'});
     }
@@ -41,6 +40,7 @@ app.use('/admin/', async (req, res, next) => {
     }
     next();
 }, routes.admin);
+app.use('/userHistory/',routes.history);
 
 (async function () {
     try {

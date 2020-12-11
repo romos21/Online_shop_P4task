@@ -5,6 +5,7 @@ const {jwtSecret} = require('../config')*/
 const router = Router();
 const user = require('../models/User');
 const basket=require('../models/UserBasket');
+const history=require('../models/UserHistory');
 
 router.post('/register', async (req, res) => {
     try {
@@ -26,6 +27,12 @@ router.post('/register', async (req, res) => {
             user_id:newUser._id,
         })
         await newUserBasket.save();
+
+        const newUserHistory=new history({
+            user_id: newUser._id,
+        })
+
+        await newUserHistory.save();
 
         const {_id,isAdmin,name, secName, country, phone} = newUser;
         return res.send({_id,isAdmin,name, secName, country, phone, email});
@@ -54,6 +61,7 @@ router.post('/login', async (req, res) => {
             jwtSecret,
         )*/
         const {_id,isAdmin,name, secName, country, phone} = userLogin;
+
         return res.send({_id,name,isAdmin, secName, country, phone, email, basketProductsCount: userBasket.products.length});
     } catch (err) {
         console.log(`${err} message`);

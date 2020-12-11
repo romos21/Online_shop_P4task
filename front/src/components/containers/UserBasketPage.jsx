@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../styles/components/UserBasketPage.css';
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
-import {basketAdd} from "../../actions";
+import {basketAdd,userAuthorization} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 import Loader from "../pages/Loader,";
@@ -17,6 +17,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
     basketAdd,
+    userAuthorization
 }
 
 const UserBasketPage = props => {
@@ -39,17 +40,38 @@ const UserBasketPage = props => {
         loaderSet(false);
     }, [])
 
+    const buyAll=async ()=>{
+        const response=await fetch(`/userHistory/setHistory`,{
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: props.user._id,
+                newBuy: props.userBasket,
+            }),
+        });
+        const responseJSON=await response.json();
+        props.basketAdd(responseJSON.clearedBasket);
+        props.userAuthorization({basketProductsCount:responseJSON.clearedBasket.length})
+    }
+
     return (
         <>
             {
-                loader? <Loader/>
-                :errMsg ?
+                loader ? <Loader/>
+                    : errMsg ?
                     <ErrorMsgPage errMsg={errMsg}/>
                     :
                     props.userBasket.length ?
-                        (<ShowProductsComponent
-                            products={props.userBasket}
-                        />)
+                        (
+                            <>
+                                <ShowProductsComponent products={props.userBasket}/>
+                                <div className='buy-all-block'>
+                                    <button onClick={buyAll} className='buy-products'>Buy All!</button>
+                                </div>
+                            </>
+                        )
                         : <section className='product-sec no-product'>
                             No Products here, let's buy here
                             <Link to='/'>CATALOG</Link>

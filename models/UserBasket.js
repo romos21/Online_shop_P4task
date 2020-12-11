@@ -5,7 +5,7 @@ const schema=new Schema({
     products:{
         type: [Object],
         default:[],
-        id: {type:Object},
+        _id: {type:Object},
         count:{type:Number},
     },
 })

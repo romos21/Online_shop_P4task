@@ -17,8 +17,6 @@ router.get('/getBasket', async (req, res) => {
             basketToSend[i].count=basket.products[i].count;
         }
 
-        console.log(basketToSend);
-
         return res.send({basket:basketToSend})
     } catch (err) {
         console.log(err + 'message');
@@ -48,6 +46,7 @@ router.put('/change', async (req, res) => {
 
         const productToChange = await product.findOne({_id: reqProductId})
 
+
         if(productToChange.count-req.body.product.count<0){
             return res.send({errMsg: 'Too much product to add in basket'});
         }
@@ -56,17 +55,19 @@ router.put('/change', async (req, res) => {
 
         const productToFind = basket.products.find(product => product._id.toString() === reqProductId.toString());
 
-        if(productToFind.count+req.body.product.count<0){
-            return res.send({errMsg: 'Too much product to remove from basket'});
-        }
-
 
         if (!productToFind) {
+            if(req.body.product.count<0){
+                return res.send({errMsg: 'No count of this product in basket'});
+            }
             basket.products.push({
                 _id: reqProductId,
                 count: req.body.product.count,
             })
         } else {
+            if(productToFind.count+req.body.product.count<0){
+                return res.send({errMsg: 'Too much product to remove from basket'});
+            }
             basket.products=basket.products.map(product=>{
                 if(product._id.toString()===reqProductId.toString()){
                     product.count+=req.body.product.count;

@@ -6,6 +6,7 @@ import {noImageUser} from '../../constants/constantImages';
 import {userAuthorization} from "../../actions";
 
 import {activeUserInfo} from '../../constants/defaultState';
+import UserHistoryPage from "./UserHistoryPage";
 
 const mapStateToProps = function (state){
     return {
@@ -46,7 +47,9 @@ function UserPage(props) {
                 </div>
                 <div className='history-block'>
                     <h1 className='history-block-head'>HISTORY</h1>
-                    <div className='history-block-buys'/>
+                    <div className='history-block-buys'>
+                        <UserHistoryPage user_id={props.user._id}/>
+                    </div>
                 </div>
             </section>
         </section>

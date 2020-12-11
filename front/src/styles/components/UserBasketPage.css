@@ -36,13 +36,6 @@
     color: #fff;
 }
 
-/*.product-button{
-    background-color: #7d8585;
-    color: #fff;
-    padding: 20px;
-    border-radius: 20px;
-}*/
-
 .change-count-block{
     text-align: center;
 }
@@ -51,4 +44,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.buy-all-block{
+    width: 30%;
+    margin: 20px auto;
+}
+
+.buy-products{
+    background-color: #35c820;
+    color: #fff;
+    width: 100%;
+    padding: 20px;
+    font-size: 21px;
+    border: none;
+    outline: none;
+}
+
+.buy-products:hover{
+    background-color: #000;
+    transition: 0.5s;
+    transform: scale(1.2);
+    border-radius: 10px;
+    border: 3px solid #fff;
 }
