@@ -44,6 +44,8 @@
 
 .search-result-list, .admins-list {
     background-color: #fff;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .search-result-list {

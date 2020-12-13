@@ -6,6 +6,7 @@ import {basketAdd,userAuthorization} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 import Loader from "../pages/Loader,";
+import {ChangePageNumber} from "../pages/ChangePageNumber";
 
 const mapStateToProps = function (state) {
     return {
@@ -24,23 +25,29 @@ const UserBasketPage = props => {
 
     const [errMsg, errMsgSet] = useState(null);
     const [loader, loaderSet] = useState(false);
+    const [pagesCount, pagesCountSet] = useState(0);
+    const [currentPage, currentPageSet] = useState(1);
+    const limit = 1;
 
     useEffect(() => {
+        console.log(props.userBasket);
         loaderSet(true);
-        fetch(`basket/getBasket?user_id=${props.user._id}`)
+        fetch(`basket/getBasket?user_id=${props.user._id}&skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
             .then(res => res.json())
             .then(data => {
                 if (data.errMsg) {
-                    console.log(data);
                     errMsgSet(data.errMsg);
                 } else {
                     props.basketAdd(data.basket);
+                    pagesCountSet(data.pagesCount);
                 }
             })
         loaderSet(false);
-    }, [])
+    }, [currentPage])
+
 
     const buyAll=async ()=>{
+
         const response=await fetch(`/userHistory/setHistory`,{
             method: 'PUT',
             headers: {
@@ -48,7 +55,6 @@ const UserBasketPage = props => {
             },
             body: JSON.stringify({
                 user_id: props.user._id,
-                newBuy: props.userBasket,
             }),
         });
         const responseJSON=await response.json();
@@ -66,10 +72,18 @@ const UserBasketPage = props => {
                     props.userBasket.length ?
                         (
                             <>
-                                <ShowProductsComponent products={props.userBasket}/>
+                                <ShowProductsComponent
+                                    products={props.userBasket}
+                                />
+                                <ChangePageNumber
+                                    pagesCount={pagesCount}
+                                    currentPageSet={currentPageSet}
+                                    currentPage={currentPage}
+                                />
                                 <div className='buy-all-block'>
                                     <button onClick={buyAll} className='buy-products'>Buy All!</button>
                                 </div>
+
                             </>
                         )
                         : <section className='product-sec no-product'>

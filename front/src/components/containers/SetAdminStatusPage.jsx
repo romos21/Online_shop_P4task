@@ -31,7 +31,12 @@ function SetAdminStatusPage(props) {
             })
     }, [])
 
-    const searchUsers = async () => {
+    const searchUsers = async (event) => {
+        event.preventDefault();
+        if(!searchInputRef.current.value.length){
+            searchResultSet([]);
+            return;
+        }
         const response = await fetch(`/admin/getUsers?inputValue=${searchInputRef.current.value}&_id=${user._id}`)
         const responseJSON = await response.json();
         searchResultSet(responseJSON.users);
@@ -43,7 +48,9 @@ function SetAdminStatusPage(props) {
                 ? <ErrorMsgPage errMsg={errMsg}/>
                 : <section className='admin-page-sec'>
                     <form className='search-user-form' type='submit'>
-                        <input ref={searchInputRef} onChange={searchUsers} className='search-user-input' type='email'
+                        <input ref={searchInputRef}
+                               onChange={searchUsers}
+                               className='search-user-input'
                                placeholder='search by user email'/>
                         <button onClick={searchUsers} className='search-user-btn' type='submit'>search</button>
                     </form>

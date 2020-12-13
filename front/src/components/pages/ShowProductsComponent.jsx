@@ -2,9 +2,10 @@ import React from 'react';
 import ProductCounter from "../containers/ProductCounter";
 import {noImageProduct} from "../../constants/constantImages";
 
+
 function ShowProductsComponent(props) {
 
-    const {products}=props;
+    const {products} = props;
 
     return (
         <>

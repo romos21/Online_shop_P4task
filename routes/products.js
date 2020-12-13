@@ -19,8 +19,16 @@ router.post('/add',async (req,res)=>{
 
 router.get('/get',async (req,res)=>{
     try {
-        const products = await product.find({});
-        return res.send(products);
+        console.log(req.query);
+
+        const products = await product.find({
+
+        }).skip(Number(req.query.skipValue)).limit(Number(req.query.limit));
+
+        const productsCount = await product.find({}).countDocuments();
+        const pagesCount=Math.ceil(productsCount/1);
+
+        return res.send({products:products, pagesCount: pagesCount});
     } catch (err){
         console.log(err +'message');
         return res.send(err);

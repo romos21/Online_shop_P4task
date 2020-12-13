@@ -7,17 +7,23 @@ const router = Router();
 
 router.get('/getBasket', async (req, res) => {
     try {
-        const basket = await userBasket.findOne({user_id: Types.ObjectId(req.query.user_id)});
+        const basket = await userBasket.findOne({user_id: Types.ObjectId(req.query.user_id)})
+
         if(!basket.products.length){
             return res.send({basket:[]})
         }
         let basketToSend=[];
-        for (let i=0; i<basket.products.length;i++){
-            basketToSend[i]=await product.findOne({_id: basket.products[i]._id});
-            basketToSend[i].count=basket.products[i].count;
+        let j=0;
+        for (let i=Number(req.query.skipValue); i<Number(req.query.skipValue)+Number(req.query.limit);i++){
+            basketToSend[j]=await product.findOne({_id: basket.products[i]._id});
+            basketToSend[j].count=basket.products[i].count;
+            j++;
         }
 
-        return res.send({basket:basketToSend})
+        const pagesCount=Math.ceil(basket.products.length/Number(req.query.limit));
+        console.log(pagesCount);
+
+        return res.send({basket:basketToSend,pagesCount:pagesCount})
     } catch (err) {
         console.log(err + 'message');
         return res.send(err);

@@ -14,6 +14,7 @@
     background-color: #fff;
     padding: 30px;
     margin: 30px auto;
+    box-sizing: border-box;
     border-radius: 10px;
     box-shadow: 0 0 10px 5px rgba(77, 207, 163, .7);
     max-width: 1000px;
@@ -36,3 +37,48 @@
     align-items: center;
 }
 
+.change-page-btn{
+    background-color: #10b386;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 21px;
+    width: 150px;
+    outline: none;
+}
+
+.change-page-block{
+    max-width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 20px;
+}
+
+.change-page-btn:hover{
+    background-color: #000;
+    transition: 0.5s;
+}
+
+.page-block{
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-block-btn{
+    border: none;
+    height: 35px;
+    outline: none;
+    width: 35px;
+    border-radius: 100%;
+    margin: 5px;
+    background-color: #8fa292;
+    color: #fff;
+}
+
+.is-current{
+    background-color: #10b386;
+    transform: scale(1.5);
+}

@@ -13,3 +13,5 @@ export const activeUserInfo={
 export const productsList=[];
 
 export const userBasket=[];
+
+export const userHistory=[];
