@@ -19,6 +19,16 @@ function FormComponent(props) {
     const formInputsWithKeys = formInputs.map(input => ({...input, key: shortId.generate()}));
 
     const onChangeInputListener = (event) => {
+        if(event.target.name==='password'){
+            if(inputRef.current.value===repPasswordRef.current.value){
+                isIdenticalSet(true);
+            }else {
+                isIdenticalSet(false);
+            }
+            if(!repPasswordRef.current.value.length){
+                isIdenticalSet(false);
+            }
+        }
         onChangeInputState({
             ...inputState,
             [event.target.name]: event.target.value,
@@ -27,6 +37,9 @@ function FormComponent(props) {
 
     const checkPassword=()=>{
         isOnFocusPasswordsCheckSet(true);
+        if(!repPasswordRef.current.value.length){
+            isIdenticalSet(false);
+        }
         if(inputRef.current.value===repPasswordRef.current.value){
             isIdenticalSet(true);
         }else {
