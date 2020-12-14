@@ -25,7 +25,6 @@ function LoginPage(props) {
     });
 
     const sendInfo = async (event) => {
-        event.preventDefault();
         try {
             setLoader(true);
             setLoginFailed('');

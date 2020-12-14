@@ -1,10 +1,11 @@
 .error-block{
-    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
     color: #ff3030;
     background-color: #eeb6b6;
-    font-size: 50px;
+    font-size: inherit;
     font-weight: bold;
-    margin: 20px auto;
+    margin: 0 auto;
     padding: 30px;
     text-align: center;
 }

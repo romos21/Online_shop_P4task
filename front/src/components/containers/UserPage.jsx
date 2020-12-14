@@ -27,6 +27,8 @@ function UserPage(props) {
         history.push('/login');
     }
 
+    console.log('token:',props.user.token);
+
     return (
         <section className='user-page-sec'>
             <button onClick={logOut} className='log-out-btn'>Log Out</button>

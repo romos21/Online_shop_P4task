@@ -53,10 +53,15 @@
     justify-content: space-between;
 }
 
-.form-input{
+.input-block {
     width: 90%;
+    margin: 0 auto;
+}
+
+.form-input{
+    margin: 10px 0;
+    width: 100%;
     box-sizing: border-box;
-    margin: 20px auto;
     padding: 20px;
     outline: none;
     border: none;
@@ -66,5 +71,15 @@
 
 .prod-add-input[type='file']{
     background-color: #10b386;
+}
+
+.is-identical{
+    background-color: #79d76f;
+    color: #177909;
+}
+
+.not-identical{
+    background-color: #eeb6b6;
+    color: #ff3030;
 }
 

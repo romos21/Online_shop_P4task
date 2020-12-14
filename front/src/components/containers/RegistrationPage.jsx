@@ -29,9 +29,8 @@ function RegistrationPage(props) {
         phone: '',
     });
 
-    const sendInfo = async (event) => {
+    const sendInfo = async () => {
         setLoader(true);
-        event.preventDefault();
         try {
             let response = await fetch('/auth/register', {
                 method: 'POST',
@@ -41,7 +40,6 @@ function RegistrationPage(props) {
                 body: JSON.stringify(formRegister),
             })
             response = await response.json();
-            console.log(response);
             props.userAuthorization(response);
             history.push('/userPage');
         } catch (err) {

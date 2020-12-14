@@ -30,7 +30,7 @@ const UserBasketPage = props => {
     const limit = 1;
 
     useEffect(() => {
-        console.log(props.userBasket);
+        console.log('awdwdawd');
         loaderSet(true);
         fetch(`basket/getBasket?user_id=${props.user._id}&skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
             .then(res => res.json())
