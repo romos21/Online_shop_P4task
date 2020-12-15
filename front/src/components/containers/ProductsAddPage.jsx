@@ -17,19 +17,19 @@ function ProductsAddPage(props) {
         count:0,
     });
 
-    const addProduct=async (event)=>{
-        event.preventDefault();
-        console.log(formProduct);
+    const addProduct=async (fileValue)=>{
+        let formData = new FormData();
+        formData.append('image', fileValue);
+        formData.append('info', JSON.stringify(formProduct));
+
+        //formData.append('products', formProduct);
         let response=await fetch('products/add',{
             method:'POST',
-            headers:{
-                'Content-type':'application/json',
-            },
-            body: JSON.stringify(formProduct),
+            body: formData,
         })
         response=await response.json();
         console.log(response);
-        props.productsSet(response);
+        //props.productsSet(response);
     }
 
     return (
@@ -39,6 +39,7 @@ function ProductsAddPage(props) {
             inputState={formProduct}
             formInputs={addProductForm}
             onClickListener={addProduct}
+            isMultipart={true}
         />
     );
 }

@@ -1,15 +1,27 @@
 const {Router}=require('express');
 const product=require('../models/Product');
+const upload=require('../multer-config');
+const fs=require('fs');
+const path=require('path');
 
 const router=Router();
 
-router.post('/add',async (req,res)=>{
+router.post('/add',  upload.single('image'), async (req,res)=>{
     try {
+        console.log(req.body);
         const newProduct=new product({
             ...req.body,
         });
         await newProduct.save();
-        const products=await product.find({});
+        await fs.rename(path.resolve(req.file.filename),
+            `${newProduct._id.toString()+req.file.originalname}`,
+            (err)=>{
+                if(err){
+                    console.log(err);
+                    return err;
+                }
+        })
+        console.log(addawdawd);
         return res.send(products);
     }catch (err){
         console.log(err +'message');

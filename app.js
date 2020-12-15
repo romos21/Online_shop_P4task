@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const multer=require('multer');
+const cors=require('cors');
 
 //routes
 const routes = require('./routes');
@@ -15,19 +15,13 @@ const models = require('./models')
 const app = express();
 
 
-const storage=multer.diskStorage({
-    destination: (req,file,cb)=>{
-        cb(null,'./uploads');
-    },
-    filename: (req,file,cb)=>{
-        cb(null,file.fieldname);
-    },
-})
 
 //middlewares
 //app.use(express.static(__dirname,'uploads'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
 app.use('/auth/', routes.auth);
 app.use('/products/', routes.products);
 app.use('/basket/', async (req, res, next) => {
