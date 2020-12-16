@@ -87,7 +87,7 @@ function App(props) {
             </header>
             <main>
                 {
-                    props.user._id ?
+                    props.user.token ?
                         <nav className='prod-show-navbar'>
                             <Link className='link-element' to='/'>catalog</Link>
                             {props.user.isAdmin ?
@@ -111,14 +111,14 @@ function App(props) {
                 </Route>
                 <Route path='/userPage'>
                     {
-                        props.user._id ?
+                        props.user.token ?
                             <UserPage/>
                             : <ErrorMsgPage errMsg={'You are not authorized'}/>
                     }
                 </Route>
                 <Route path='/prodAddPage'>
                     {
-                        props.user._id ?
+                        props.user.token ?
                             props.user.isAdmin ?
                                 <ProductsAddPage/>
                                 : <ErrorMsgPage errMsg={'You are not an admin'}/>
