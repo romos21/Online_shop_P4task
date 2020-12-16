@@ -12,7 +12,7 @@ router.post('/register', async (req, res) => {
         const {email, password} = req.body
         const userRegister = await user.findOne({email: email});
         if (userRegister) {
-            return res.send('This user has been already registered');
+            return res.send({errMsg:'This user has been already registered'});
         }
         const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = new user({
@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
         )
 
         const {_id, isAdmin, name, secName, country, phone} = newUser;
-        return res.send({_id, isAdmin, name, secName, country, phone, email, token: token});
+        return res.send({_id, isAdmin, name, secName, country, phone, email, token});
     } catch (err) {
         console.log(`${err} message`);
         return res.send('Ошибка!');
@@ -52,11 +52,11 @@ router.post('/login', async (req, res) => {
         const {email, password} = req.body
         const userLogin = await user.findOne({email: email});
         if (!userLogin) {
-            return res.send({loginErrMsg: 'User not found'});
+            return res.send({errMsg: 'User not found'});
         }
         const isMatch = await bcrypt.compare(password, userLogin.password);
         if (!isMatch) {
-            return res.send({loginErrMsg: `Not correct data for ${userLogin.name} ${userLogin.secName} account`});
+            return res.send({errMsg: `Not correct data for ${userLogin.name} ${userLogin.secName} account`});
         }
 
         const userBasket = await basket.findOne({user_id: userLogin._id})
@@ -70,6 +70,7 @@ router.post('/login', async (req, res) => {
         return res.send({
             _id, name, isAdmin, secName, country, phone, email,
             basketProductsCount: userBasket.products.length,
+            token,
         });
     } catch (err) {
         console.log(`${err} message`);

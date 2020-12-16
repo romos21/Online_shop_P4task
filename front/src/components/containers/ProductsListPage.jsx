@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import '../../styles/components/ProductsListPage.css';
 import {connect} from "react-redux";
 import {productsSet} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
-import classNames from 'classnames';
 import {ChangePageNumber} from "../pages/ChangePageNumber";
 
 const mapStateToProps = function (state) {
@@ -22,11 +21,11 @@ function ProductsListPage(props) {
 
     const [pagesCount, pagesCountSet] = useState(0);
     const [currentPage, currentPageSet] = useState(1);
-    const limit = 1;
+    const limit = 3;
 
     useEffect(() => {
-        console.log('here');
-        fetch(`products/get/?skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
+        const skipValue = (currentPage - 1) * limit;
+        fetch(`products/get/?skipValue=${skipValue}&limit=${limit}`)
             .then((res) => {
                 return res.json();
             })
@@ -39,6 +38,7 @@ function ProductsListPage(props) {
             console.log(err);
             return err;
         })
+
     }, [currentPage])
 
     return (

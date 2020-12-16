@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {userAuthorization} from "../../actions";
 import FormComponent from "../pages/FormComponent";
 import {registrationForm} from "../../constants/forms";
+import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 
 const mapStateToProps=function (state){
     return {
@@ -20,6 +21,7 @@ const mapDispatchToProps={
 function RegistrationPage(props) {
     const history = useHistory();
     const [loader, setLoader] = useState(false);
+    const [registerError, registerErrorSet] = useState(null);
     const [formRegister, setFormRegister] = useState({
         email: '',
         password: '',
@@ -31,6 +33,7 @@ function RegistrationPage(props) {
 
     const sendInfo = async () => {
         setLoader(true);
+        registerErrorSet(null);
         try {
             let response = await fetch('/auth/register', {
                 method: 'POST',
@@ -40,8 +43,13 @@ function RegistrationPage(props) {
                 body: JSON.stringify(formRegister),
             })
             response = await response.json();
-            props.userAuthorization(response);
-            history.push('/userPage');
+            if(response.errMsg){
+                console.log(response.errMsg);
+                registerErrorSet(response.errMsg);
+            }else {
+                props.userAuthorization(response);
+                history.push('/userPage');
+            }
         } catch (err) {
             console.log(err + ' message');
         }
@@ -55,6 +63,7 @@ function RegistrationPage(props) {
                 headTextContent='Create Account'
                 formInputs={registrationForm}
                 onChangeInputState={setFormRegister}
+                sendFailed={registerError}
                 inputState={formRegister}
                 onClickListener={sendInfo}
             />

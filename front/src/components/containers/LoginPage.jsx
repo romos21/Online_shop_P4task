@@ -24,7 +24,7 @@ function LoginPage(props) {
         password: '',
     });
 
-    const sendInfo = async (event) => {
+    const sendInfo = async () => {
         try {
             setLoader(true);
             setLoginFailed('');
@@ -36,8 +36,8 @@ function LoginPage(props) {
                 body: JSON.stringify(formLogin),
             })
             response = await response.json();
-            if(response.loginErrMsg){
-                setLoginFailed(response.loginErrMsg);
+            if(response.errMsg){
+                setLoginFailed(response.errMsg);
             } else {
                 props.userAuthorization(response);
                 history.push('/userPage');
@@ -56,7 +56,7 @@ function LoginPage(props) {
                 formInputs={loginForm}
                 onChangeInputState={setFormLogin}
                 inputState={formLogin}
-                loginFailed={loginFailed}
+                sendFailed={loginFailed}
                 onClickListener={sendInfo}
             />
         </>

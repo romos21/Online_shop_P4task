@@ -1,5 +1,6 @@
 export const activeUserInfo={
     _id:'',
+    token:'',
     name: '',
     secName:'',
     country:'',

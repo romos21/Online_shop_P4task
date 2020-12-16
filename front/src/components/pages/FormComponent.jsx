@@ -8,7 +8,7 @@ import classNames from 'classnames';
 function FormComponent(props) {
 
 
-    const {onChangeInputState, inputState, loginFailed, formInputs} = props;
+    const {onChangeInputState, inputState, sendFailed, formInputs} = props;
     let inputRef = useRef('');
     let fileRef = useRef('');
     const [repPasswordState, repPasswordStateSet] = useState('');
@@ -86,7 +86,7 @@ function FormComponent(props) {
             <h1 className='form-sec-head'>{props.headTextContent}</h1>
             {errMsg ? <ErrorMsgPage errMsg={errMsg}/> : null}
             <form className='form-submit' encType={props.isMultipart ? "multipart/form-data" : null}>
-                {loginFailed ? errMsg ? null : <ErrorMsgPage errMsg={loginFailed}/> : null}
+                {sendFailed ? errMsg ? null : <ErrorMsgPage errMsg={sendFailed}/> : null}
                 {
                     formInputsWithKeys.map(input => {
                         const isOnFocus = !isOnFocusPasswordsCheck ? (input.name === inputRef.current.name) : false;

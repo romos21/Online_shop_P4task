@@ -20,7 +20,7 @@ function SetAdminStatusPage(props) {
     const [adminsList, adminsListSet] = useState([]);
 
     useEffect(() => {
-        fetch(`/admin/getAdmins?_id=${user._id}`)
+        fetch(`/admin/getAdmins?token=${user.token}`)
             .then(res => res.json())
             .then(data => {
                 if (data.errMsg) {
@@ -37,7 +37,7 @@ function SetAdminStatusPage(props) {
             searchResultSet([]);
             return;
         }
-        const response = await fetch(`/admin/getUsers?inputValue=${searchInputRef.current.value}&_id=${user._id}`)
+        const response = await fetch(`/admin/getUsers?token=${user.token}&inputValue=${searchInputRef.current.value}`)
         const responseJSON = await response.json();
         searchResultSet(responseJSON.users);
     }
@@ -56,10 +56,12 @@ function SetAdminStatusPage(props) {
                     </form>
                     <div className='search-result-list'>
                         {
-                            searchResult.map(user => {
+                            searchResult.map(userToMap => {
                                 return (
                                     <ShowAdminInfo
-                                        user={user}
+                                        key={userToMap.email}
+                                        user={userToMap}
+                                        adminToken={user.token}
                                         adminsListSet={adminsListSet}
                                         adminsList={adminsList}
                                         searchResult={searchResult}
@@ -71,11 +73,12 @@ function SetAdminStatusPage(props) {
                     </div>
                     <section className='admins-list'>
                         {
-                            adminsList.map(user => {
+                            adminsList.map(userToMap => {
                                 return (
                                     <ShowAdminInfo
-                                        key={user.email}
-                                        user={user}
+                                        key={userToMap.email}
+                                        user={userToMap}
+                                        adminToken={user.token}
                                         adminsListSet={adminsListSet}
                                         adminsList={adminsList}
                                         searchResult={searchResult}

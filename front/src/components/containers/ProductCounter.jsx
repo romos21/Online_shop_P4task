@@ -57,7 +57,7 @@ function ProductCounter(props) {
         } else {
             const stateForReturn=history.location.pathname==='/'?'main':'basket';
             const fetchBody={
-                user_id: user._id,
+                token: user.token,
                 stateForReturn: stateForReturn,
                 product: {
                     _id: product._id,

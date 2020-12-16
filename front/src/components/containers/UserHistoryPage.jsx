@@ -14,18 +14,15 @@ const mapDispatchToProps={
 
 function UserHistoryPage(props) {
 
-    const {user_id, history,historySet} = props;
+    const {token,history,historySet} = props;
 
     useEffect(() => {
-        fetch(`/userHistory/getHistory?user_id=${user_id}`)
+        fetch(`/userHistory/getHistory?token=${token}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 historySet(data.buysList);
             })
     }, [])
-
-    console.log(history);
 
     return (
             <section className='user-history-sec'>

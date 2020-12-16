@@ -6,15 +6,15 @@ import classNames from 'classnames';
 
 function ShowAdminInfo(props) {
 
-    const {user,adminsListSet,adminsList}=props;
+    const {user,adminToken,adminsListSet,adminsList}=props;
 
     const changeUserStatus=async ()=>{
 
-        const response=await fetch(`/admin/setUserStatus?_id=${user._id}`);
+        const response=await fetch(`/admin/setUserStatus?token=${adminToken}&email=${user.email}`);
         const responseJSON=await response.json();
 
         if(!responseJSON.status){
-            const newAdminsList=adminsList.filter(admin=>admin._id!==user._id);
+            const newAdminsList=adminsList.filter(admin=>admin.email!==user.email);
             adminsListSet(newAdminsList);
         } else {
             adminsListSet([...adminsList, user])

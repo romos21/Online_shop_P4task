@@ -1,16 +1,18 @@
 const {Router} = require('express');
 const router = Router();
-const user = require('../models/User');
+const {user,products} = require('../models');
+const upload=require('../multer-config');
+const fs=require('fs');
+const path=require('path');
+
 
 router.get('/getAdmins',async (req,res)=>{
 
     const admins=await user.find({isAdmin:true});
-
-    const otherAdmins=admins.filter(admin=>admin._id.toString()!==req.query._id);
+    const otherAdmins=admins.filter(admin=>admin._id.toString()!==req.query.token);
 
     const adminsToSend=otherAdmins.map(admin=>{
         return {
-            _id:admin._id,
             name:admin.name,
             secName:admin.secName,
             email:admin.email,
@@ -24,10 +26,9 @@ router.get('/getUsers',async (req,res)=>{
 
     const regExpToFind=new RegExp(req.query.inputValue);
     const users=await user.find({email: { $regex: regExpToFind}});
-    const otherUsers=users.filter(user=>user._id.toString()!==req.query._id)
+    const otherUsers=users.filter(user=>user._id.toString()!==req.query.token);
     const usersToSend=otherUsers.map(user=>{
         return {
-            _id:user._id,
             name:user.name,
             secName:user.secName,
             email:user.email,
@@ -39,15 +40,36 @@ router.get('/getUsers',async (req,res)=>{
 
 router.get('/setUserStatus',async (req,res)=>{
 
-    const userQuery=await user.findOne({_id:req.query._id});
-
+    const userQuery=await user.findOne({email:req.query.email});
     const userToSend=await user.findOneAndUpdate(
-        {_id:req.query._id},
+        {email:req.query.email},
         {isAdmin: !userQuery.isAdmin},
         {new: true, useFindAndModify: false}
         );
 
     return res.send({status: userToSend.isAdmin});
+})
+
+router.post('/add',  upload.single('image'), async (req,res)=>{
+    try {
+        console.log(req.body);
+        const newProduct=new product({
+            ...req.body,
+        });
+        await newProduct.save();
+        await fs.rename(path.resolve(req.file.filename),
+            `${newProduct._id.toString()+req.file.originalname}`,
+            (err)=>{
+                if(err){
+                    console.log(err);
+                    return err;
+                }
+            })
+        return res.send(products);
+    }catch (err){
+        console.log(err +'message');
+        return res.send(err);
+    }
 })
 
 module.exports = router;

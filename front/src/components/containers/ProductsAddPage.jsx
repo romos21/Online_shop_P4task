@@ -4,11 +4,17 @@ import {productsSet} from "../../actions";
 import FormComponent from "../pages/FormComponent";
 import {addProductForm} from "../../constants/forms";
 
+const mapStateToProps=state=>({
+    user: state.userReducer,
+})
+
 const mapDispatchToProps={
     productsSet
 }
 
 function ProductsAddPage(props) {
+
+    const {user}=props;
 
     const [formProduct, setFormProduct] = useState({
         title:'',
@@ -20,16 +26,14 @@ function ProductsAddPage(props) {
     const addProduct=async (fileValue)=>{
         let formData = new FormData();
         formData.append('image', fileValue);
-        formData.append('info', JSON.stringify(formProduct));
+        formData.append('info', JSON.stringify({...formProduct, token: user.token}));
 
-        //formData.append('products', formProduct);
         let response=await fetch('products/add',{
             method:'POST',
             body: formData,
         })
         response=await response.json();
         console.log(response);
-        //props.productsSet(response);
     }
 
     return (
@@ -44,4 +48,4 @@ function ProductsAddPage(props) {
     );
 }
 
-export default connect(null,mapDispatchToProps)(ProductsAddPage);
+export default connect(mapStateToProps,mapDispatchToProps)(ProductsAddPage);

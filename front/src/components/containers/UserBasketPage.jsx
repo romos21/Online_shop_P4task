@@ -30,9 +30,8 @@ const UserBasketPage = props => {
     const limit = 1;
 
     useEffect(() => {
-        console.log('awdwdawd');
         loaderSet(true);
-        fetch(`basket/getBasket?user_id=${props.user._id}&skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
+        fetch(`basket/getBasket?token=${props.user.token}&skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
             .then(res => res.json())
             .then(data => {
                 if (data.errMsg) {
@@ -54,7 +53,7 @@ const UserBasketPage = props => {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
-                user_id: props.user._id,
+                token:props.user.token,
             }),
         });
         const responseJSON=await response.json();

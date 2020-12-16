@@ -6,7 +6,9 @@ const basket = require('../models/UserBasket');
 const product = require('../models/Product');
 
 router.get('/getHistory', async (req, res) => {
-    const userHistory = await history.findOne({user_id: Types.ObjectId(req.query.user_id)});
+
+    console.log(req.query.token);
+    const userHistory = await history.findOne({user_id: Types.ObjectId(req.query.token)});
 
     const ids=[];
     userHistory.buys_list.forEach(buy=>{
@@ -34,7 +36,7 @@ router.get('/getHistory', async (req, res) => {
 })
 
 router.put('/setHistory', async (req, res) => {
-    const user = await history.findOne({user_id: Types.ObjectId(req.body.user_id)});
+    const user = await history.findOne({user_id: Types.ObjectId(req.body.token)});
     const userBasket=await basket.findOne({user_id: Types.ObjectId(req.body.user_id)});
     const productsCost=await product.find({_id: {$in: userBasket.products}},{cost:1,_id:1});
     const userBasketWithCost=userBasket.products.map(product=>{
