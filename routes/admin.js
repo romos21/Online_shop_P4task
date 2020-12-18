@@ -1,74 +1,95 @@
 const {Router} = require('express');
 const router = Router();
-const {user,products} = require('../models');
+const user = require('../models/User');
+const product=require('../models/Product');
 const upload=require('../multer-config');
 const fs=require('fs');
 const path=require('path');
 
 
+
 router.get('/getAdmins',async (req,res)=>{
+    try {
+        const admins = await user.find({isAdmin: true});
+        const otherAdmins = admins.filter(admin => admin._id.toString() !== req.query.token);
 
-    const admins=await user.find({isAdmin:true});
-    const otherAdmins=admins.filter(admin=>admin._id.toString()!==req.query.token);
-
-    const adminsToSend=otherAdmins.map(admin=>{
-        return {
-            name:admin.name,
-            secName:admin.secName,
-            email:admin.email,
-            isAdmin: admin.isAdmin,
-        }
-    })
-    return res.send({admins:adminsToSend});
+        const adminsToSend = otherAdmins.map(admin => {
+            return {
+                name: admin.name,
+                secName: admin.secName,
+                email: admin.email,
+                isAdmin: admin.isAdmin,
+            }
+        })
+        return res.send({admins: adminsToSend});
+    } catch (err){
+        console.log(err+' message')
+        return res.send({errMsg: err});
+    }
 })
 
 router.get('/getUsers',async (req,res)=>{
-
-    const regExpToFind=new RegExp(req.query.inputValue);
-    const users=await user.find({email: { $regex: regExpToFind}});
-    const otherUsers=users.filter(user=>user._id.toString()!==req.query.token);
-    const usersToSend=otherUsers.map(user=>{
-        return {
-            name:user.name,
-            secName:user.secName,
-            email:user.email,
-            isAdmin: user.isAdmin,
-        }
-    })
-    return res.send({users:usersToSend});
+    try {
+        const regExpToFind = new RegExp(req.query.inputValue);
+        const users = await user.find({email: {$regex: regExpToFind}});
+        const otherUsers = users.filter(user => user._id.toString() !== req.query.token);
+        const usersToSend = otherUsers.map(user => {
+            return {
+                name: user.name,
+                secName: user.secName,
+                email: user.email,
+                isAdmin: user.isAdmin,
+            }
+        })
+        return res.send({users: usersToSend})
+    } catch (err){
+        console.log(err+' message')
+        return res.send({errMsg: err});
+    }
 })
 
 router.get('/setUserStatus',async (req,res)=>{
+    try {
 
-    const userQuery=await user.findOne({email:req.query.email});
-    const userToSend=await user.findOneAndUpdate(
-        {email:req.query.email},
-        {isAdmin: !userQuery.isAdmin},
-        {new: true, useFindAndModify: false}
+        const userQuery = await user.findOne({email: req.query.email});
+        const userToSend = await user.findOneAndUpdate(
+            {email: req.query.email},
+            {isAdmin: !userQuery.isAdmin},
+            {new: true, useFindAndModify: false}
         );
 
-    return res.send({status: userToSend.isAdmin});
+        return res.send({status: userToSend.isAdmin});
+    } catch (err){
+        console.log(err+' message')
+        return res.send({errMsg: err});
+    }
 })
 
-router.post('/add',  upload.single('image'), async (req,res)=>{
+router.post('/addProduct',  upload.single('image'), async (req,res)=>{
     try {
-        console.log(req.body);
+        const newProductInfo={
+            title: req.body.title,
+            description: req.body.description,
+            cost: Number(req.body.cost),
+            count: Number(req.body.count),
+        }
         const newProduct=new product({
-            ...req.body,
+            ...newProductInfo
         });
         await newProduct.save();
-        await fs.rename(path.resolve(req.file.filename),
-            `${newProduct._id.toString()+req.file.originalname}`,
-            (err)=>{
-                if(err){
-                    console.log(err);
-                    return err;
-                }
-            })
-        return res.send(products);
+
+        const prevFileName=path.resolve(__dirname,'../multer-config/uploads', req.body.title+req.file.originalname);
+        const newFileName=path.resolve(__dirname,'../multer-config/uploads', newProduct._id+req.file.originalname);
+        await fs.rename(prevFileName,newFileName, (err)=>{
+            if(err){
+                console.log(err);
+                return({errMsg:err});
+            }
+            return res.send({...newProduct._doc, image:'images/'+newProduct._id+req.file.originalname});
+        })
     }catch (err){
-        console.log(err +'message');
-        return res.send(err);
+        console.log(err+' message')
+        return res.send({errMsg: err});
     }
 })
 

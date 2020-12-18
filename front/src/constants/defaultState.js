@@ -16,3 +16,7 @@ export const productsList=[];
 export const userBasket=[];
 
 export const userHistory=[];
+
+export const currentPageForProducts=1;
+
+export const currentPageForBasket=1;

@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {userAuthorization} from "../../actions";
 import FormComponent from "../pages/FormComponent";
 import {registrationForm} from "../../constants/forms";
-import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 
 const mapStateToProps=function (state){
     return {
@@ -42,12 +41,12 @@ function RegistrationPage(props) {
                 },
                 body: JSON.stringify(formRegister),
             })
-            response = await response.json();
-            if(response.errMsg){
-                console.log(response.errMsg);
-                registerErrorSet(response.errMsg);
+            const responseJSON = await response.json();
+            if(responseJSON.errMsg){
+                registerErrorSet(responseJSON.errMsg);
             }else {
-                props.userAuthorization(response);
+                props.userAuthorization(responseJSON);
+                await localStorage.setItem('userToken',responseJSON.token);
                 history.push('/userPage');
             }
         } catch (err) {

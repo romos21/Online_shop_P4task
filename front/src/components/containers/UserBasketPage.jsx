@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../styles/components/UserBasketPage.css';
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
-import {basketAdd,userAuthorization} from "../../actions";
+import {basketAdd,userAuthorization,basketPageSet} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 import Loader from "../pages/Loader,";
@@ -13,27 +13,33 @@ const mapStateToProps = function (state) {
         userBasket: state.basketReducer,
         user: state.userReducer,
         products: state.productReducer,
+        basketPage: state.basketPageReducer,
     }
 }
 
 const mapDispatchToProps = {
     basketAdd,
-    userAuthorization
+    userAuthorization,
+    basketPageSet,
 }
 
 const UserBasketPage = props => {
 
+    const {user,basketPage,basketPageSet}=props;
+
     const [errMsg, errMsgSet] = useState(null);
     const [loader, loaderSet] = useState(false);
     const [pagesCount, pagesCountSet] = useState(0);
-    const [currentPage, currentPageSet] = useState(1);
-    const limit = 1;
+    const limit = 3;
 
     useEffect(() => {
+        errMsgSet(null);
         loaderSet(true);
-        fetch(`basket/getBasket?token=${props.user.token}&skipValue=${(currentPage - 1) * limit}&limit=${limit}`)
+        const skipValue=(basketPage - 1) * limit;
+        fetch(`basket/getBasket?token=${user.token}&skipValue=${skipValue}&limit=${limit}`)
             .then(res => res.json())
             .then(data => {
+                console.log(data);
                 if (data.errMsg) {
                     errMsgSet(data.errMsg);
                 } else {
@@ -42,7 +48,7 @@ const UserBasketPage = props => {
                 }
             })
         loaderSet(false);
-    }, [currentPage])
+    }, [basketPage,user.token])
 
 
     const buyAll=async ()=>{
@@ -57,8 +63,12 @@ const UserBasketPage = props => {
             }),
         });
         const responseJSON=await response.json();
-        props.basketAdd(responseJSON.clearedBasket);
-        props.userAuthorization({basketProductsCount:responseJSON.clearedBasket.length})
+        if(responseJSON.errMsg){
+            errMsgSet(responseJSON.errMsg);
+        } else {
+            props.basketAdd(responseJSON.clearedBasket);
+            props.userAuthorization({basketProductsCount:responseJSON.clearedBasket.length})
+        }
     }
 
     return (
@@ -76,8 +86,8 @@ const UserBasketPage = props => {
                                 />
                                 <ChangePageNumber
                                     pagesCount={pagesCount}
-                                    currentPageSet={currentPageSet}
-                                    currentPage={currentPage}
+                                    currentPageSet={basketPageSet}
+                                    currentPage={basketPage}
                                 />
                                 <div className='buy-all-block'>
                                     <button onClick={buyAll} className='buy-products'>Buy All!</button>

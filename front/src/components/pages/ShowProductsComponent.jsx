@@ -15,13 +15,13 @@ function ShowProductsComponent(props) {
                         return (
                             <section key={product._id} className='prod-show-sec'>
                                 <img alt={product.title}
-                                     src={noImageProduct}
+                                     src={product.image?product.image:noImageProduct}
                                      className='product-show-img'/>
                                 <section className='product-show-info'>
                                     <h2>{product.title}</h2>
                                     <p>{product.description}</p>
-                                    <p>{product.cost}</p>
-                                    <p>{product.count === 0 ? 'Нет в наличии' : product.count}</p>
+                                    <p>Cost: {product.cost}$</p>
+                                    <p>Count: {product.count === 0 ? 'Нет в наличии' : product.count}</p>
                                 </section>
                                 <ProductCounter product={product}/>
                             </section>

@@ -6,7 +6,7 @@ const schema=new Schema({
         type: [Object],
         default:[],
         _id: {type:Object},
-        count:{type:Number},
+        count:{type:Number, min: 0},
     },
 })
 

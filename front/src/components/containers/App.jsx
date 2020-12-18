@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../styles/components/App.css';
 import {withRouter, Route, Link} from 'react-router-dom';
 import UserPage from "./UserPage";
@@ -9,6 +9,7 @@ import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
 import UserBasketPage from "./UserBasketPage";
 import {connect} from "react-redux";
+import {userAuthorization} from '../../actions';
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 
 const mapStateToProps = function (state) {
@@ -17,7 +18,24 @@ const mapStateToProps = function (state) {
     }
 };
 
+const mapDispatchToProps={
+    userAuthorization,
+}
+
 function App(props) {
+
+    useEffect(()=>{
+        const token=localStorage.getItem('userToken');
+        if(token){
+            console.log(token);
+            fetch(`user/getUserInfo?token=${token}`)
+                .then(data=>data.json())
+                .then(res=>{
+                    console.log('res: ',res);
+                    props.userAuthorization({...res,token:token});
+                })
+        }
+    },[])
 
     return (
         <div className='container'>
@@ -154,4 +172,4 @@ function App(props) {
     );
 }
 
-export default withRouter(connect(mapStateToProps)(App));
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(App));

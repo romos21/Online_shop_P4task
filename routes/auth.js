@@ -35,15 +35,15 @@ router.post('/register', async (req, res) => {
         await newUserHistory.save();
 
         const token = jwt.sign(
-            {userId: userRegister.id},
+            {userId: newUser._id},
             jwtSecret,
         )
 
-        const {_id, isAdmin, name, secName, country, phone} = newUser;
-        return res.send({_id, isAdmin, name, secName, country, phone, email, token});
+        const {isAdmin, name, secName, country, phone} = newUser;
+        return res.send({isAdmin, name, secName, country, phone, email, token, basketProductsCount: 0});
     } catch (err) {
         console.log(`${err} message`);
-        return res.send('Ошибка!');
+        return res.send({errMsg: err});
     }
 })
 
@@ -65,16 +65,16 @@ router.post('/login', async (req, res) => {
             {userId: userLogin._id},
             jwtSecret,
         )
-        const {_id, isAdmin, name, secName, country, phone} = userLogin;
+        const {isAdmin, name, secName, country, phone} = userLogin;
 
         return res.send({
-            _id, name, isAdmin, secName, country, phone, email,
+            name, isAdmin, secName, country, phone, email,
             basketProductsCount: userBasket.products.length,
             token,
         });
     } catch (err) {
         console.log(`${err} message`);
-        return res.send('Error');
+        return res.send({errMsg: err});
     }
 })
 

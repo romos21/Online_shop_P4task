@@ -53,16 +53,25 @@
     justify-content: space-between;
 }
 
-.input-block {
+
+.input-row{
     width: 90%;
-    margin: 0 auto;
+    margin: 5px auto;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-gap: 10px;
+}
+
+.form-label{
+    align-self: center;
+    font-size: 21px;
+    font-weight: bold;
 }
 
 .form-input{
-    margin: 10px 0;
     width: 100%;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px;
     outline: none;
     border: none;
     border-bottom: 1px solid #7d8585;

@@ -35,11 +35,12 @@ function LoginPage(props) {
                 },
                 body: JSON.stringify(formLogin),
             })
-            response = await response.json();
-            if(response.errMsg){
-                setLoginFailed(response.errMsg);
+            const responseJSON = await response.json();
+            if(responseJSON.errMsg){
+                setLoginFailed(responseJSON.errMsg);
             } else {
-                props.userAuthorization(response);
+                props.userAuthorization(responseJSON);
+                await localStorage.setItem('userToken',responseJSON.token);
                 history.push('/userPage');
             }
         } catch (err) {

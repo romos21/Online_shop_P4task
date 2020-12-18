@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useHistory} from "react-router";
 import '../../styles/components/UserPage.css';
 import {connect} from 'react-redux';
@@ -21,15 +21,38 @@ const mapDispatchToProps = {
 function UserPage(props) {
 
     const {user} = props;
+    const [isPopupOpen, isPopupOpenSet] = useState(false);
     const history = useHistory();
     const logOut = () => {
         props.userAuthorization(activeUserInfo);
+        localStorage.clear();
+        isPopupOpenSet(false);
         history.push('/login');
+    }
+
+    const closePopUp=()=>{
+        isPopupOpenSet(false);
+    }
+
+    const OpenLogOutPopup = () => {
+        isPopupOpenSet(true);
     }
 
     return (
         <section className='user-page-sec'>
-            <button onClick={logOut} className='log-out-btn'>Log Out</button>
+            {isPopupOpen ?
+                (<section className='popup-sec'>
+                    <div className='popup-block'>
+                        <div className='popup-question'>Are you sure to Log Out?</div>
+                        <div className='popup-variants'>
+                            <button onClick={logOut} className='popup-variants-btn'>Yes</button>
+                            <button onClick={closePopUp} className='popup-variants-btn'>No</button>
+                        </div>
+                    </div>
+                </section>)
+                : null
+            }
+            <button onClick={OpenLogOutPopup} className='log-out-btn'>Log Out</button>
             <h1 className='user-page-sec-head'>Welcome, {user.name}!</h1>
             <section className='user-info-sec'>
                 <div className='user-info-block'>

@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import shortId from 'short-id';
+import {useHistory} from 'react-router-dom';
 import '../../styles/components/FormComponent.css';
 import {ErrorMsgPage} from "./ErrorMsgPage";
 import classNames from 'classnames';
@@ -7,7 +8,7 @@ import classNames from 'classnames';
 
 function FormComponent(props) {
 
-
+    const history = useHistory();
     const {onChangeInputState, inputState, sendFailed, formInputs} = props;
     let inputRef = useRef('');
     let fileRef = useRef('');
@@ -20,7 +21,7 @@ function FormComponent(props) {
 
     const onChangeInputListener = (event) => {
 
-        if (event.target.name === 'password') {
+        if (event.target.name === 'password' && history.location.pathname === '/register') {
             if (inputRef.current.value === repPasswordRef.current.value) {
                 isIdenticalSet(true);
             } else {
@@ -56,20 +57,21 @@ function FormComponent(props) {
         for (let val in inputState) {
             if (!inputState[val]) {
                 errMsgSet(`${val} row is required but empty`)
-                console.log(errMsg);
                 return;
             }
         }
 
-        if(props.isMultipart){
-            console.log(fileRef.current.files[0]);
+        if (props.isMultipart) {
             props.onClickListener(fileRef.current.files[0]);
-        }else if (isIdentical) {
-            props.onClickListener();
         } else {
-            errMsgSet('Un correct data for sending');
+            if (history.location.pathname === '/register') {
+                if (!isIdentical) {
+                    errMsgSet('Password rows is not identical');
+                    return;
+                }
+            }
+            props.onClickListener();
         }
-
     }
 
     const onFocusListener = event => {
@@ -78,7 +80,7 @@ function FormComponent(props) {
     }
 
     const onFocusListenerPasswordCheck = event => {
-        inputRef.current = event.target.previousSibling;
+        inputRef.current = event.target.parentElement.previousElementSibling.lastChild;
     }
 
     return (
@@ -91,43 +93,48 @@ function FormComponent(props) {
                     formInputsWithKeys.map(input => {
                         const isOnFocus = !isOnFocusPasswordsCheck ? (input.name === inputRef.current.name) : false;
                         return (
-                            <div className='input-block' key={input.key}>
-                                <input
-                                    className='form-input'
-                                    autoFocus={isOnFocus}
-                                    type={input.type}
-                                    name={input.name}
-                                    onChange={onChangeInputListener}
-                                    placeholder={input.name}
-                                    value={inputState[input.name]}
-                                    onFocus={onFocusListener}
-                                    required
-                                />
-
-                                {input.name === 'password' ?
+                            <section key={input.key}>
+                                <div className='input-row'>
+                                    <label className='form-label'>{input.label}</label>
                                     <input
-                                        ref={repPasswordRef}
-                                        onChange={checkPassword}
-                                        autoFocus={isOnFocusPasswordsCheck}
-                                        className={classNames('form-input', {
-                                            'is-identical': isIdentical,
-                                            'not-identical': !isIdentical,
-                                        })}
-                                        value={repPasswordState}
+                                        className='form-input'
+                                        autoFocus={isOnFocus}
                                         type={input.type}
-                                        onFocus={onFocusListenerPasswordCheck}
-                                        placeholder={'repeat ' + input.name}
                                         name={input.name}
+                                        onChange={onChangeInputListener}
+                                        value={inputState[input.name]}
+                                        onFocus={onFocusListener}
                                         required
                                     />
+                                </div>
+
+                                {(input.name === 'password' && history.location.pathname === '/register') ?
+                                    <div className='input-row'>
+                                        <label className='form-label'>repeat {input.label}</label>
+                                        <input
+                                            ref={repPasswordRef}
+                                            onChange={checkPassword}
+                                            autoFocus={isOnFocusPasswordsCheck}
+                                            className={classNames('form-input', {
+                                                'is-identical': isIdentical,
+                                                'not-identical': !isIdentical,
+                                            })}
+                                            value={repPasswordState}
+                                            type={input.type}
+                                            onFocus={onFocusListenerPasswordCheck}
+                                            name={input.name}
+                                            required
+                                        />
+                                    </div>
                                     : null
                                 }
-                            </div>
+                            </section>
 
                         )
                     })
                 }
-                {props.isMultipart ? (<input ref={fileRef} className='form-input' type='file' name='image'/>) : null}
+                {props.isMultipart ? (
+                    <input ref={fileRef} className='form-input' type='file' name='image'/>) : null}
                 <button onClick={onSendInputs} className='form-button'>Send</button>
             </form>
         </section>

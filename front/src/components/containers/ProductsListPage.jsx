@@ -1,36 +1,41 @@
 import React, {useEffect, useState, useRef} from 'react';
 import '../../styles/components/ProductsListPage.css';
 import {connect} from "react-redux";
-import {productsSet} from "../../actions";
+import {productsSet, productPageSet} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
-import {ChangePageNumber} from "../pages/ChangePageNumber";
+import ChangePageNumber from "../pages/ChangePageNumber";
+import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 
 const mapStateToProps = function (state) {
     return {
         products: state.productReducer,
+        productPage: state.productPageReducer,
     }
 }
 
 const mapDispatchToProps = {
     productsSet,
+    productPageSet
 }
 
 function ProductsListPage(props) {
 
-    const {productsSet, products} = props;
+    const {productPage, productPageSet, productsSet, products} = props;
 
     const [pagesCount, pagesCountSet] = useState(0);
-    const [currentPage, currentPageSet] = useState(1);
+    const [errMsg, errMsgSet] = useState('');
     const limit = 3;
 
     useEffect(() => {
-        const skipValue = (currentPage - 1) * limit;
+        const skipValue = (productPage - 1) * limit;
         fetch(`products/get/?skipValue=${skipValue}&limit=${limit}`)
             .then((res) => {
                 return res.json();
             })
             .then((data) => {
-                if (data.products.length) {
+                if (data.errMsg) {
+                    errMsgSet(data.errMsg);
+                } else if (data.products.length) {
                     productsSet(data.products);
                     pagesCountSet(data.pagesCount);
                 }
@@ -39,19 +44,24 @@ function ProductsListPage(props) {
             return err;
         })
 
-    }, [currentPage])
+    }, [productPage])
 
     return (
         <>
-            <ShowProductsComponent
-                requestUrl={'products/get/'}
-                products={products}
-            />
-            <ChangePageNumber
-                pagesCount={pagesCount}
-                currentPageSet={currentPageSet}
-                currentPage={currentPage}
-            />
+            {errMsg ? <ErrorMsgPage errMsg={errMsg}/>
+                :
+                <>
+                    <ShowProductsComponent
+                        requestUrl={'products/get/'}
+                        products={products}
+                    />
+                    <ChangePageNumber
+                        currentPage={productPage}
+                        currentPageSet={productPageSet}
+                        pagesCount={pagesCount}
+                    />
+                </>
+            }
         </>
     );
 }

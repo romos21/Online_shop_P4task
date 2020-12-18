@@ -10,7 +10,6 @@ export const ShowBuyPage = props => {
     const [isHistoryOpen, isHistoryOpenSet] = useState(false);
 
     const productsListClose = () => {
-
         isHistoryOpenSet(!isHistoryOpen);
     }
 
@@ -81,7 +80,7 @@ export const ShowBuyPage = props => {
                             buy.products.map(product => {
                                 return (
                                     <div key={product.title} className='buying-block'>
-                                        <img className='buying-img' src={noImageProduct}/>
+                                        <img className='buying-img' src={product.image?product.image:noImageProduct}/>
                                         <div className='buying-info'>
                                             <span>Title:</span>
                                             <span>{product.title}</span>

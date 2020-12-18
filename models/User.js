@@ -7,7 +7,7 @@ const schema=new Schema({
     phone:{type: String, required:true, trim:true, minlength:8,maxlength:20},
     password:{type: String, required:true,minlength:8},
     country:{type: String, required:true, trim:true},
-    isAdmin: {type: Boolean, required:true},
+    isAdmin: {type: Boolean},
 })
 
 module.exports=model('User', schema);

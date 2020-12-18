@@ -75,10 +75,9 @@ function ProductCounter(props) {
             if(user.basketProductsCount!==responseJSON.basketLength){
                 userAuthorization({basketProductsCount:responseJSON.basketLength});
             }
-            if(stateForReturn==='main'){
-                productsChangeProduct(responseJSON.product);
-            } else {
-                basketChangeProduct(responseJSON.product);
+            if(stateForReturn==='basket'){
+                const image=basket.find(product=>product._id===responseJSON.product._id).image;
+                basketChangeProduct({...responseJSON.product,image:image});
             }
             productCountChange(0);
             btnTextContentChange(btnAddState);

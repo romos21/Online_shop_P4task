@@ -17,6 +17,7 @@ function UserHistoryPage(props) {
     const {token,history,historySet} = props;
 
     useEffect(() => {
+        console.log(token);
         fetch(`/userHistory/getHistory?token=${token}`)
             .then(res => res.json())
             .then(data => {

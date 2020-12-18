@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import {connect} from "react-redux";
+import {useHistory} from "react-router";
 import {productsSet} from "../../actions";
 import FormComponent from "../pages/FormComponent";
 import {addProductForm} from "../../constants/forms";
@@ -16,6 +17,8 @@ function ProductsAddPage(props) {
 
     const {user}=props;
 
+    const history=useHistory();
+
     const [formProduct, setFormProduct] = useState({
         title:'',
         description:'',
@@ -25,15 +28,18 @@ function ProductsAddPage(props) {
 
     const addProduct=async (fileValue)=>{
         let formData = new FormData();
+        for(let key in formProduct){
+            formData.append(key,formProduct[key]);
+        }
         formData.append('image', fileValue);
-        formData.append('info', JSON.stringify({...formProduct, token: user.token}));
 
-        let response=await fetch('products/add',{
+        let response=await fetch(`admin/addProduct?token=${user.token}`,{
             method:'POST',
             body: formData,
         })
         response=await response.json();
-        console.log(response);
+        productsSet(response);
+        history.push('/');
     }
 
     return (

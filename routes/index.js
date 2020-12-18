@@ -1,4 +1,5 @@
 const auth = require('./auth');
+const user = require('./user');
 const products = require('./products');
 const basket = require('./basket');
 const admin = require('./admin');
@@ -10,4 +11,5 @@ module.exports = {
     basket,
     admin,
     history,
+    user,
 }

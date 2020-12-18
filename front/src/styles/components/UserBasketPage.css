@@ -52,12 +52,13 @@
 }
 
 .buy-products{
-    background-color: #35c820;
+    background-color: #d28b08;
+    border-radius: 10px;
+    border: 3px solid #fff;
     color: #fff;
     width: 100%;
     padding: 20px;
     font-size: 21px;
-    border: none;
     outline: none;
 }
 
@@ -66,5 +67,4 @@
     transition: 0.5s;
     transform: scale(1.2);
     border-radius: 10px;
-    border: 3px solid #fff;
 }

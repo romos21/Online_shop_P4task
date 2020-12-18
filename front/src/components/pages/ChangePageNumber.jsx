@@ -1,40 +1,42 @@
 import React, {useState} from "react";
 import classNames from "classnames";
 
-export const ChangePageNumber=(props)=>{
 
-    const {currentPageSet,currentPage,pagesCount}=props;
+export const ChangePageNumber = (props) => {
 
-    const createPagesList = () => {
-        const pageNumbersNew = [];
-        for (let i = 1; i < pagesCount+1; i++) {
-            if (i < 4) {
+    const {currentPageSet, currentPage, pagesCount} = props;
+    let i = 0;
+
+
+    const createPagesList = (currentPage) => {
+        let pageNumbersNew=[];
+        if (pagesCount > 3) {
+            pageNumbersNew = [1, 2, 3];
+            const statePageNumbers = [currentPage, pagesCount];
+            statePageNumbers.forEach(page => {
+                if (!pageNumbersNew.includes(page) && page > 0) {
+                    if (page > pageNumbersNew[pageNumbersNew.length - 1] + 1) {
+                        pageNumbersNew.push('...');
+                    }
+                    pageNumbersNew.push(page);
+                }
+            })
+        } else {
+            for(let i=1; i<pagesCount+1; i++){
                 pageNumbersNew.push(i);
-            }
-            if (currentPage > 3 && currentPage < pagesCount) {
-                if (currentPage > 4) {
-                    pageNumbersNew.push('...');
-                }
-                pageNumbersNew.push(currentPage);
-                if (currentPage + 1 < pagesCount) {
-                    pageNumbersNew.push('...');
-                }
-            }
-            if (i === 3 && pagesCount > 3) {
-                pageNumbersNew.push(pagesCount)
             }
         }
         return pageNumbersNew;
     }
 
-    const [pageNumbers=createPagesList(),pageNumbersSet]=useState();
+    const [pageNumbers = createPagesList(), pageNumbersSet] = useState();
 
     const goToNextPage = () => {
         if (currentPage + 1 > pagesCount) {
             return;
         }
         currentPageSet(currentPage + 1);
-        pageNumbersSet(createPagesList());
+        pageNumbersSet(createPagesList(currentPage + 1));
     }
 
     const goToPrevPage = () => {
@@ -42,7 +44,7 @@ export const ChangePageNumber=(props)=>{
             return;
         }
         currentPageSet(currentPage - 1);
-        pageNumbersSet(createPagesList());
+        pageNumbersSet(createPagesList(currentPage - 1));
     }
 
     const goToPage = (event) => {
@@ -57,12 +59,13 @@ export const ChangePageNumber=(props)=>{
                 {
                     pageNumbers.map(page => {
                         if (page === '...') {
-                            return (<span key={page}>{page}</span>)
+                            i++;
+                            return (<span key={page + i}>{page}</span>)
                         }
                         return (<button
                             key={page}
-                            className={classNames('page-block-btn',{
-                                'is-current': page===currentPage
+                            className={classNames('page-block-btn', {
+                                'is-current': page === currentPage
                             })}
                             onClick={goToPage}
                         >{page}
@@ -74,3 +77,5 @@ export const ChangePageNumber=(props)=>{
         </div>
     );
 }
+
+export default ChangePageNumber;

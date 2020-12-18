@@ -3,6 +3,7 @@ import '../../styles/components/SetAdminStatusPage.css';
 import {connect} from 'react-redux';
 import ShowAdminInfo from "../pages/ShowAdminInfo";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
+import Loader from "../pages/Loader,";
 
 const mapStateToProps = function (state) {
     return {
@@ -15,11 +16,15 @@ function SetAdminStatusPage(props) {
     const {user} = props;
 
     const [searchResult, searchResultSet] = useState([]);
+    const [isLoaderAdmins, isLoaderAdminsSet] = useState(false);
+    const [isLoaderUsers, isLoaderUsersSet] = useState(false);
     const [errMsg, errMsgSet] = useState(null);
     const searchInputRef = useRef(null);
     const [adminsList, adminsListSet] = useState([]);
 
     useEffect(() => {
+        isLoaderAdminsSet(true);
+        errMsgSet(null);
         fetch(`/admin/getAdmins?token=${user.token}`)
             .then(res => res.json())
             .then(data => {
@@ -29,9 +34,11 @@ function SetAdminStatusPage(props) {
                     adminsListSet(data.admins);
                 }
             })
-    }, [])
+        isLoaderAdminsSet(false);
+    }, [user.token])
 
     const searchUsers = async (event) => {
+        isLoaderUsersSet(true);
         event.preventDefault();
         if(!searchInputRef.current.value.length){
             searchResultSet([]);
@@ -40,6 +47,7 @@ function SetAdminStatusPage(props) {
         const response = await fetch(`/admin/getUsers?token=${user.token}&inputValue=${searchInputRef.current.value}`)
         const responseJSON = await response.json();
         searchResultSet(responseJSON.users);
+        isLoaderUsersSet(false);
     }
 
     return (
@@ -56,6 +64,7 @@ function SetAdminStatusPage(props) {
                     </form>
                     <div className='search-result-list'>
                         {
+                            isLoaderUsers? <Loader/>:
                             searchResult.map(userToMap => {
                                 return (
                                     <ShowAdminInfo
@@ -73,6 +82,7 @@ function SetAdminStatusPage(props) {
                     </div>
                     <section className='admins-list'>
                         {
+                            isLoaderAdmins?<Loader/>:
                             adminsList.map(userToMap => {
                                 return (
                                     <ShowAdminInfo

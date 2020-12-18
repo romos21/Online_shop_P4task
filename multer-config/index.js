@@ -1,14 +1,18 @@
 const multer=require('multer');
 
-/*const storage=multer.diskStorage({
+const storage=multer.diskStorage({
     destination: (req,file,cb)=>{
         console.log(req.body);
         cb(null,__dirname+'/uploads');
     },
-    filename: (req,file,cb)=>{
-        cb(null, Date.now()+file.originalname);
+    filename: async (req,file,cb)=>{
+        //const token=req.body.token?req.body.token:req.query.token;
+        /*const name=await bcrypt.hash(token,12);
+        console.log(name);*/
+        console.log(file);
+        cb(null, req.body.title+file.originalname);
     },
-})*/
+})
 
 const fileFilter=(req,file,cb)=>{
     console.log(file.mimetype);
@@ -23,7 +27,7 @@ const fileFilter=(req,file,cb)=>{
 }
 
 const upload=multer({
-    dest: __dirname+'/uploads',
+    storage: storage,
     fileFilter: fileFilter,
 });
 

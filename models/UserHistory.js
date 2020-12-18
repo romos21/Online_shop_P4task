@@ -7,16 +7,12 @@ const schema=new Schema({
         default:[],
         buy: {
             type:Object,
-            date: {
-                type:Date,
-                default: Date.now()
-            },
             products:{
                 type:[Object],
                 _id:{type:Object},
-                count: Number
+                count: {type:Number, min:0}
             },
-            cost: {type:Number},
+            cost: {type:Number, min:0},
         },
     },
 })

@@ -6,6 +6,47 @@
     background-color: #fff;
 }
 
+.popup-sec{
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-block{
+    background-color: #fff;
+    padding: 20px;
+    font-size: 40px;
+    border-radius: 5px;
+}
+
+.popup-question{
+    color: #10b386;
+    margin: 20px;
+}
+
+.popup-variants{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.popup-variants-btn{
+    outline: none;
+    background-color: #10b386;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
 .log-out-btn{
     position: absolute;
     top: 0;

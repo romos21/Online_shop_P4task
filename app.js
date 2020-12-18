@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const {jwtValidation,checkUserStatus}=require('./middlewares');
 const cors=require('cors');
+const path=require('path');
 
 //routes
 const routes = require('./routes');
@@ -13,12 +14,15 @@ const {port, mongoUri} = require('./config');
 const app = express();
 
 
+
+app.use('/images',express.static(path.join(__dirname,'multer-config/uploads/')));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(jwtValidation());
 app.use('/auth/', routes.auth);
+app.use('/user/', routes.user);
 app.use('/products/', routes.products);
 app.use('/basket/', routes.basket);
 app.use('/admin/', checkUserStatus(),routes.admin);
