@@ -41,6 +41,11 @@ function RegistrationPage(props) {
                 },
                 body: JSON.stringify(formRegister),
             })
+            if(!response.ok){
+                registerErrorSet('Error in input data validation');
+                setLoader(false);
+                return;
+            }
             const responseJSON = await response.json();
             if(responseJSON.errMsg){
                 registerErrorSet(responseJSON.errMsg);
@@ -51,6 +56,7 @@ function RegistrationPage(props) {
             }
         } catch (err) {
             console.log(err + ' message');
+            registerErrorSet('Error in input data validation');
         }
         setLoader(false);
     }

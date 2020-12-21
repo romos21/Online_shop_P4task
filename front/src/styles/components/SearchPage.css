@@ -1,0 +1,36 @@
+.search-form {
+    display: flex;
+    margin: 0 auto 10px;
+    grid-area: search-form;
+    width: 80%;
+    padding: 20px;
+}
+
+.search-input, .search-btn {
+    outline: none;
+    border: none;
+    padding: 20px;
+}
+
+.search-input {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 80%;
+}
+
+.search-btn {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #10b386;
+    color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.search-icon{
+    height: 30px;
+    width: 30px;
+    fill: #fff;
+}

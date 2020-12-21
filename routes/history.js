@@ -47,7 +47,7 @@ router.get('/getHistory', async (req, res) => {
         })
     } catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 
@@ -64,7 +64,7 @@ router.put('/setHistory', async (req, res) => {
             if(product.count>productFindFromStore.count){
                 errMsg= `Sorry but we have only 
                     ${productFindFromStore.count} of 
-                    ${product.title}. Please, change count of this product in your basket and try again.`;
+                    ${productFindFromStore.title}. Please, change count of this product in your basket and try again.`;
             }
             return {
                 ...product,
@@ -106,7 +106,7 @@ router.put('/setHistory', async (req, res) => {
         return res.send({clearedBasket: []});
     } catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 

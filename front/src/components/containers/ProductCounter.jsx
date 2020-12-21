@@ -55,6 +55,9 @@ function ProductCounter(props) {
         if (!user.email) {
             history.push('/login');
         } else {
+            if(productCount===0){
+                return;
+            }
             const stateForReturn=history.location.pathname==='/'?'main':'basket';
             const fetchBody={
                 token: user.token,

@@ -83,6 +83,7 @@ function FormComponent(props) {
         inputRef.current = event.target.parentElement.previousElementSibling.lastChild;
     }
 
+    console.log(formInputsWithKeys);
     return (
         <section className='form-sec'>
             <h1 className='form-sec-head'>{props.headTextContent}</h1>

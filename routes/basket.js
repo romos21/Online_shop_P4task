@@ -83,6 +83,7 @@ router.put('/change', async (req, res) => {
                         }
                         return product;
                     })
+                    basketProducts=basketProducts.filter(product=>product.count!==0);
                 }
             }
             await userBasket.updateOne({user_id: reqUserToken}, {products: basketProducts});
@@ -98,7 +99,7 @@ router.put('/change', async (req, res) => {
         } catch
             (err) {
             console.log(err + 'message');
-            return res.send({errMsg: err});
+            res.status(400).send({errMsg: err});
         }
     }
 )

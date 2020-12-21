@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import classNames from "classnames";
 
 
@@ -7,6 +7,9 @@ export const ChangePageNumber = (props) => {
     const {currentPageSet, currentPage, pagesCount} = props;
     let i = 0;
 
+    useEffect(()=>{
+        createPagesList(currentPage);
+    },[pagesCount])
 
     const createPagesList = (currentPage) => {
         let pageNumbersNew=[];

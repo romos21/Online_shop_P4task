@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import ShowAdminInfo from "../pages/ShowAdminInfo";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
 import Loader from "../pages/Loader,";
+import {SearchPage} from "../pages/SearchPage";
 
 const mapStateToProps = function (state) {
     return {
@@ -37,17 +38,25 @@ function SetAdminStatusPage(props) {
         isLoaderAdminsSet(false);
     }, [user.token])
 
-    const searchUsers = async (event) => {
-        isLoaderUsersSet(true);
-        event.preventDefault();
-        if(!searchInputRef.current.value.length){
-            searchResultSet([]);
-            return;
+    const searchUsers = async (searchValue) => {
+        try {
+            isLoaderUsersSet(true);
+            if (!searchInputRef.current.value.length) {
+                searchResultSet([]);
+                isLoaderUsersSet(false);
+                return;
+            }
+            const response = await fetch(`/admin/getUsers?token=${user.token}&searchValue=${searchValue}`)
+            if(!response.ok){
+                errMsgSet('No users found');
+                return;
+            }
+            const responseJSON = await response.json();
+            searchResultSet(responseJSON.users);
+            isLoaderUsersSet(false);
+        } catch (err){
+            console.log(err);
         }
-        const response = await fetch(`/admin/getUsers?token=${user.token}&inputValue=${searchInputRef.current.value}`)
-        const responseJSON = await response.json();
-        searchResultSet(responseJSON.users);
-        isLoaderUsersSet(false);
     }
 
     return (
@@ -55,13 +64,10 @@ function SetAdminStatusPage(props) {
             {errMsg
                 ? <ErrorMsgPage errMsg={errMsg}/>
                 : <section className='admin-page-sec'>
-                    <form className='search-user-form' type='submit'>
-                        <input ref={searchInputRef}
-                               onChange={searchUsers}
-                               className='search-user-input'
-                               placeholder='search by user email'/>
-                        <button onClick={searchUsers} className='search-user-btn' type='submit'>search</button>
-                    </form>
+                    <SearchPage
+                        searchInputRef={searchInputRef}
+                        searchStart={searchUsers}
+                    />
                     <div className='search-result-list'>
                         {
                             isLoaderUsers? <Loader/>:

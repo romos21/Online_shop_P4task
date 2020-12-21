@@ -24,13 +24,13 @@ router.get('/getAdmins',async (req,res)=>{
         return res.send({admins: adminsToSend});
     } catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 
 router.get('/getUsers',async (req,res)=>{
     try {
-        const regExpToFind = new RegExp(req.query.inputValue);
+        const regExpToFind = new RegExp(req.query.searchValue);
         const users = await user.find({email: {$regex: regExpToFind}});
         const otherUsers = users.filter(user => user._id.toString() !== req.query.token);
         const usersToSend = otherUsers.map(user => {
@@ -44,7 +44,7 @@ router.get('/getUsers',async (req,res)=>{
         return res.send({users: usersToSend})
     } catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 
@@ -61,7 +61,7 @@ router.get('/setUserStatus',async (req,res)=>{
         return res.send({status: userToSend.isAdmin});
     } catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 
@@ -89,7 +89,7 @@ router.post('/addProduct',  upload.single('image'), async (req,res)=>{
         })
     }catch (err){
         console.log(err+' message')
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 

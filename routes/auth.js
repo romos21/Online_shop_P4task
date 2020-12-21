@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
         return res.send({isAdmin, name, secName, country, phone, email, token, basketProductsCount: 0});
     } catch (err) {
         console.log(`${err} message`);
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 
@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
         });
     } catch (err) {
         console.log(`${err} message`);
-        return res.send({errMsg: err});
+        res.status(400).send({errMsg: err});
     }
 })
 

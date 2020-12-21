@@ -5,6 +5,7 @@ import {productsSet, productPageSet} from "../../actions";
 import ShowProductsComponent from "../pages/ShowProductsComponent";
 import ChangePageNumber from "../pages/ChangePageNumber";
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
+import {SearchPage} from "../pages/SearchPage";
 
 const mapStateToProps = function (state) {
     return {
@@ -24,12 +25,25 @@ function ProductsListPage(props) {
 
     const [pagesCount, pagesCountSet] = useState(0);
     const [errMsg, errMsgSet] = useState('');
+    const searchInputRef = useRef(null);
     const limit = 3;
 
+
     useEffect(() => {
+        searchProducts();
+    }, [productPage])
+
+    const searchProducts = (searchValue) => {
         const skipValue = (productPage - 1) * limit;
-        fetch(`products/get/?skipValue=${skipValue}&limit=${limit}`)
+        if(!searchValue){
+            searchValue='';
+        }
+        fetch(`products/get/?skipValue=${skipValue}&limit=${limit}&searchValue=${searchValue}`)
             .then((res) => {
+                if(!res.ok){
+                    errMsgSet('No products');
+                    return;
+                }
                 return res.json();
             })
             .then((data) => {
@@ -37,20 +51,24 @@ function ProductsListPage(props) {
                     errMsgSet(data.errMsg);
                 } else if (data.products.length) {
                     productsSet(data.products);
-                    pagesCountSet(data.pagesCount);
+                    if(data.pagesCount!==pagesCount) {
+                        pagesCountSet(data.pagesCount);
+                    }
                 }
             }).catch(err => {
             console.log(err);
             return err;
         })
-
-    }, [productPage])
-
+    }
     return (
         <>
             {errMsg ? <ErrorMsgPage errMsg={errMsg}/>
                 :
                 <>
+                    <SearchPage
+                        searchInputRef={searchInputRef}
+                        searchStart={searchProducts}
+                    />
                     <ShowProductsComponent
                         requestUrl={'products/get/'}
                         products={products}
