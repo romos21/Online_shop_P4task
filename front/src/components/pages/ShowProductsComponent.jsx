@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductCounter from "../containers/ProductCounter";
 import {noImageProduct} from "../../constants/constantImages";
-
+import {Link} from "react-router-dom";
 
 function ShowProductsComponent(props) {
 
@@ -12,11 +12,14 @@ function ShowProductsComponent(props) {
             {
                 products.length ?
                     products.map(product => {
+                        console.log(product.image);
                         return (
                             <section key={product._id} className='prod-show-sec'>
-                                <img alt={product.title}
-                                     src={product.image?product.image:noImageProduct}
-                                     className='product-show-img'/>
+                                <Link to={"/productPage/"+product._id}>
+                                    <img alt={product.title}
+                                         src={product.image ? product.image : noImageProduct}
+                                         className='product-show-img'/>
+                                </Link>
                                 <section className='product-show-info'>
                                     <h2>{product.title}</h2>
                                     <p>{product.description}</p>

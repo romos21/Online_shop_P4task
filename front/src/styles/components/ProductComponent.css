@@ -1,0 +1,32 @@
+.set-comment-btn{
+    background-color: #10b386;
+    color: #ffffff;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    margin: 5px 0;
+    outline: none;
+}
+
+.set-comment-btn:hover{
+    background-color: black;
+    transition: .5s;
+}
+
+.comment-area{
+    padding: 15px;
+    height: 100px;
+    width: 1000px;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 10px;
+    outline: none;
+}
+
+.comment-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px auto;
+}

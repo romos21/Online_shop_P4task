@@ -9,20 +9,25 @@ import ProductsAddPage from "./ProductsAddPage";
 import ProductsListPage from "./ProductsListPage";
 import UserBasketPage from "./UserBasketPage";
 import {connect} from "react-redux";
-import {userAuthorization} from '../../actions';
+import {productsSet, userAuthorization} from '../../actions';
 import {ErrorMsgPage} from "../pages/ErrorMsgPage";
+import ProductComponent from "../pages/ProductComponent";
 
 const mapStateToProps = function (state) {
     return {
         user: state.userReducer,
+        products: state.productReducer,
     }
 };
 
 const mapDispatchToProps={
     userAuthorization,
+    productsSet
 }
 
 function App(props) {
+
+    const {user, userAuthorization, products, productsSet} = props;
 
     useEffect(()=>{
         const token=localStorage.getItem('userToken');
@@ -32,7 +37,7 @@ function App(props) {
                 .then(data=>data.json())
                 .then(res=>{
                     console.log('res: ',res);
-                    props.userAuthorization({...res,token:token});
+                    userAuthorization({...res,token:token});
                 })
         }
     },[])
@@ -85,13 +90,13 @@ function App(props) {
                     <span className='header-title shop'>shop</span>
                 </div>
                 {
-                    props.user.email.length ?
+                    user.email.length ?
                         <Link className='basket-link' to='/basket'>
                             <div className='basket-link-block'>
                                 <svg className='basket-icon'>
                                     <use xlinkHref="#basket"/>
                                 </svg>
-                                <span className='basket-products-count'>{props.user.basketProductsCount}</span>
+                                <span className='basket-products-count'>{user.basketProductsCount}</span>
                             </div>
                         </Link>
                         : <div>
@@ -105,10 +110,10 @@ function App(props) {
             </header>
             <main>
                 {
-                    props.user.token ?
+                    user.token ?
                         <nav className='prod-show-navbar'>
                             <Link className='link-element' to='/'>catalog</Link>
-                            {props.user.isAdmin ?
+                            {user.isAdmin ?
                                 <>
                                     <Link className='link-element' to='/prodAddPage'>add product</Link>
                                     <Link className='link-element' to='/adminsList'>admins list</Link>
@@ -129,15 +134,14 @@ function App(props) {
                 </Route>
                 <Route path='/userPage'>
                     {
-                        props.user.token ?
+                        user.token ?
                             <UserPage/>
                             : <ErrorMsgPage errMsg={'You are not authorized'}/>
                     }
                 </Route>
                 <Route path='/prodAddPage'>
                     {
-                        props.user.token ?
-                            props.user.isAdmin ?
+                            user.token ? user.isAdmin ?
                                 <ProductsAddPage/>
                                 : <ErrorMsgPage errMsg={'You are not an admin'}/>
                             : <ErrorMsgPage errMsg={'You are not authorized'}/>
@@ -147,6 +151,14 @@ function App(props) {
                 <Route path='/basket'>
                     <UserBasketPage/>
                 </Route>
+                <Route path='/productPage/:id' render={(props) =>
+                    <ProductComponent
+                        match={props.match}
+                        products={products}
+                        setProducts={productsSet}
+                        user={user}
+                    />
+                }/>
             </main>
             <footer className='footer'>
                 <span className='footer-text'>Students ITechArt Lab 2020</span>

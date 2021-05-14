@@ -24,7 +24,7 @@ router.get('/getAdmins',async (req,res)=>{
         return res.send({admins: adminsToSend});
     } catch (err){
         console.log(err+' message')
-        res.status(400).send({errMsg: err});
+        res.status(404).send({errMsg: err});
     }
 })
 
@@ -44,7 +44,7 @@ router.get('/getUsers',async (req,res)=>{
         return res.send({users: usersToSend})
     } catch (err){
         console.log(err+' message')
-        res.status(400).send({errMsg: err});
+        res.status(404).send({errMsg: err});
     }
 })
 
@@ -67,6 +67,7 @@ router.get('/setUserStatus',async (req,res)=>{
 
 router.post('/addProduct',  upload.single('image'), async (req,res)=>{
     try {
+        console.log("FILE: ", req.file,);
         const newProductInfo={
             title: req.body.title,
             description: req.body.description,
