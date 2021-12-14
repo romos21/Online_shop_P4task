@@ -28,8 +28,6 @@ router.get('/get', async (req, res) => {
 
         const pagesCount = Math.ceil(productsCount / req.query.limit);
 
-        console.log('pagesCount: ', pagesCount);
-
         const systemWay = path.resolve(__dirname, '../multer-config/uploads/');
         await fs.readdir(systemWay, (err, files) => {
             if (err) {
@@ -38,8 +36,6 @@ router.get('/get', async (req, res) => {
             const productsToSend = products.map(product => {
 
                 const image = files.find(file => file.indexOf(product._id.toString()) !== -1);
-                console.log("image: ", 'images/' + image);
-
 
                 return {
                     ...product._doc,
@@ -57,7 +53,6 @@ router.get('/get', async (req, res) => {
 })
 
 router.get('/getComments', async (req, res) => {
-    console.log("HERE");
     const comments = await ProductComments.findOne({productId: ObjectId(req.query.product)},{_id:0, comments:1});
     if(!comments){
         return res.status(200).send([]);
@@ -75,7 +70,6 @@ router.get('/getComments', async (req, res) => {
 })
 
 router.post('/addComment', async (req, res) => {
-    console.log("HERE ADD");
     const comment = new ProductComments({
         productId: ObjectId(req.body.product),
         userId: ObjectId(req.body.token),

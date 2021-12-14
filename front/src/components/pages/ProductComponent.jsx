@@ -7,7 +7,6 @@ import '../../styles/components/ProductComponent.css';
 function ProductComponent(props) {
 
     const {products, match, setProducts, user} = props;
-    console.log(props);
     const {id} = match.params;
     const areaRef = useRef(null);
     const [comments,setComments] = useState([]);
@@ -17,7 +16,6 @@ function ProductComponent(props) {
     useEffect(async () => {
         const response = await fetch(`http://localhost:5000/products/getComments?product=${id}`);
         const responseJSON = await response.json();
-        console.log(responseJSON);
         setComments(responseJSON);
     },[]);
 
@@ -32,7 +30,6 @@ function ProductComponent(props) {
             })
         });
         const responseJSON = await response.json();
-        console.log(responseJSON);
         setComments(responseJSON);
     }
 

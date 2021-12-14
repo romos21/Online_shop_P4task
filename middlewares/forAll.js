@@ -4,7 +4,6 @@ const {jwtSecret} = require('../config');
 const jwtValidation = () => {
     return function (req,res,next) {
         if (!(req.url.match(/^\/(products\/get)|addComment|getComments|auth|images/i))) {
-            console.log(req.url);
             const token = req.query.token ? req.query.token : req.body.token;
             if (!token) {
                 return res.send({errMsg: 'user not authorized'});

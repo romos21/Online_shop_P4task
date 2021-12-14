@@ -67,7 +67,6 @@ router.get('/setUserStatus',async (req,res)=>{
 
 router.post('/addProduct',  upload.single('image'), async (req,res)=>{
     try {
-        console.log("FILE: ", req.file,);
         const newProductInfo={
             title: req.body.title,
             description: req.body.description,

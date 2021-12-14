@@ -12,7 +12,6 @@ function ShowProductsComponent(props) {
             {
                 products.length ?
                     products.map(product => {
-                        console.log(product.image);
                         return (
                             <section key={product._id} className='prod-show-sec'>
                                 <Link to={"/productPage/"+product._id}>

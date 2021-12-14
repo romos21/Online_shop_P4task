@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "back": "nodemon app.js",
     "front": "npm run start --prefix front",
-    "start": "concurrently \"npm run back\" \"npm run front\""
+    "start": "concurrently \"npm run back\" \"npm run front\"",
+    "migrations": "node migrations/users.js"
   },
   "repository": {
     "type": "git",

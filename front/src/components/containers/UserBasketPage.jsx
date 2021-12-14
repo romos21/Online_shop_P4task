@@ -39,7 +39,6 @@ const UserBasketPage = props => {
         fetch(`basket/getBasket?token=${user.token}&skipValue=${skipValue}&limit=${limit}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 if (data.errMsg) {
                     errMsgSet(data.errMsg);
                 } else {

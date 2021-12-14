@@ -32,11 +32,9 @@ function App(props) {
     useEffect(()=>{
         const token=localStorage.getItem('userToken');
         if(token){
-            console.log(token);
             fetch(`user/getUserInfo?token=${token}`)
                 .then(data=>data.json())
                 .then(res=>{
-                    console.log('res: ',res);
                     userAuthorization({...res,token:token});
                 })
         }

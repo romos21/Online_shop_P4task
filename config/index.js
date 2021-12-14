@@ -1,5 +1,5 @@
 module.exports={
     port: 5000,
-    mongoUri: 'mongodb+srv://romos21:123456qwerty@cluster0.d77an.mongodb.net/app?retryWrites=true&w=majority',
+    mongoUri: 'mongodb+srv://roman:12345678910@online-store.hk1jx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     jwtSecret: 'jwtSecret'
 }
